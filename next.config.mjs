@@ -3,6 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ["@electric-sql/pglite", "postgres"],
   poweredByHeader: false,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "20mb",
+    },
+  },
   async headers() {
     return [
       {
