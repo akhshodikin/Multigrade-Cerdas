@@ -15,14 +15,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Jika sudah login dan mencoba mengakses halaman /login, redirect ke /dashboard
-  if (pathname === "/login") {
-    const sessionToken = request.cookies.get("multigrade_session")?.value;
-    if (sessionToken) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
   const response = NextResponse.next();
 
   // 3. Tambahkan header pengaman tambahan

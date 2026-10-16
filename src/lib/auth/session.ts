@@ -41,7 +41,12 @@ export async function createSession(userId: string): Promise<string> {
 }
 
 export async function destroyCurrentSession(): Promise<void> {
-  const cookieStore = await cookies();
+  let cookieStore;
+  try {
+    cookieStore = await cookies();
+  } catch {
+    return;
+  }
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (token) {
@@ -61,7 +66,11 @@ export async function destroyCurrentSession(): Promise<void> {
       }
       await db.delete(schema.sessions).where(eq(schema.sessions.id, token));
     }
-    cookieStore.delete(SESSION_COOKIE_NAME);
+    try {
+      cookieStore.delete(SESSION_COOKIE_NAME);
+    } catch {
+      // In case destroyCurrentSession is called in a context where cookies cannot be mutated
+    }
   }
 }
 
@@ -76,7 +85,12 @@ export interface CurrentUser {
 }
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  const cookieStore = await cookies();
+  let cookieStore;
+  try {
+    cookieStore = await cookies();
+  } catch {
+    return null;
+  }
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (!token) {
@@ -94,13 +108,22 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     .where(and(eq(schema.sessions.id, token), gt(schema.sessions.expiresAt, now)));
 
   if (activeSessions.length === 0) {
-    cookieStore.delete(SESSION_COOKIE_NAME);
+    try {
+      cookieStore.delete(SESSION_COOKIE_NAME);
+    } catch {
+      // In Next.js App Router Server Components, cookies cannot be modified during render phase.
+      // Ignoring this error is safe as returning null correctly signals unauthenticated state.
+    }
     return null;
   }
 
   const user = activeSessions[0].user;
   if (!user.isActive) {
-    cookieStore.delete(SESSION_COOKIE_NAME);
+    try {
+      cookieStore.delete(SESSION_COOKIE_NAME);
+    } catch {
+      // Ignore cookie deletion error in Server Component render phase.
+    }
     return null;
   }
 

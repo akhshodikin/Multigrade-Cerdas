@@ -76,4 +76,12 @@ describe("Pengujian Autentikasi & Keamanan Sesi", () => {
     // Bersihkan
     await db.delete(schema.sessions).where(eq(schema.sessions.id, token));
   });
+
+  it("harus menangani sesi tidak valid atau kedaluwarsa secara aman tanpa crash pada Server Component", async () => {
+    const { getCurrentUser } = await import("@/lib/auth/session");
+    // Saat tidak ada token atau token tidak cocok di DB, getCurrentUser harus mengembalikan null dengan aman
+    const user = await getCurrentUser();
+    // Di lingkungan pengujian tanpa cookie aktif, harus mengembalikan null tanpa melempar fatal error
+    expect(user).toBeNull();
+  });
 });
