@@ -5,6 +5,7 @@ import * as schema from "@/db/schema";
 import { createUserAction, toggleUserStatusAction } from "@/app/actions/users";
 import { Users, UserPlus, Shield, CheckCircle2, XCircle } from "lucide-react";
 import { UserExcelActions } from "@/components/users/UserExcelActions";
+import { EditUserModal } from "@/components/users/EditUserModal";
 
 export default async function GuruPage() {
   const currentUser = await getCurrentUser();
@@ -100,25 +101,40 @@ export default async function GuruPage() {
                     </td>
                     {isAdmin && (
                       <td className="px-4 py-3.5 text-right">
-                        {u.id !== currentUser.id && (
-                          <form
-                            action={async () => {
-                              "use server";
-                              await toggleUserStatusAction(u.id, u.isActive);
+                        <div className="flex items-center justify-end gap-1.5">
+                          <EditUserModal
+                            user={{
+                              id: u.id,
+                              name: u.name,
+                              email: u.email,
+                              role: u.role as any,
+                              nip: u.nip,
+                              phone: u.phone,
+                              assignedGroupId: u.assignedGroupId,
+                              isActive: u.isActive,
                             }}
-                          >
-                            <button
-                              type="submit"
-                              className={`px-2.5 py-1 rounded text-[11px] font-bold border transition ${
-                                u.isActive
-                                  ? "text-rose-700 border-rose-200 hover:bg-rose-50"
-                                  : "text-emerald-700 border-emerald-200 hover:bg-emerald-50"
-                              }`}
+                            isAdmin={isAdmin}
+                          />
+                          {u.id !== currentUser.id && (
+                            <form
+                              action={async () => {
+                                "use server";
+                                await toggleUserStatusAction(u.id, u.isActive);
+                              }}
                             >
-                              {u.isActive ? "Nonaktifkan" : "Aktifkan"}
-                            </button>
-                          </form>
-                        )}
+                              <button
+                                type="submit"
+                                className={`px-2 py-1 rounded text-[11px] font-bold border transition ${
+                                  u.isActive
+                                    ? "text-rose-700 border-rose-200 hover:bg-rose-50"
+                                    : "text-emerald-700 border-emerald-200 hover:bg-emerald-50"
+                                }`}
+                              >
+                                {u.isActive ? "Nonaktifkan" : "Aktifkan"}
+                              </button>
+                            </form>
+                          )}
+                        </div>
                       </td>
                     )}
                   </tr>

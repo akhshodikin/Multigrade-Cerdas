@@ -6,6 +6,7 @@ import { asc, eq } from "drizzle-orm";
 import { createStudentAction, toggleStudentStatusAction } from "@/app/actions/students";
 import { GraduationCap, UserPlus, CheckCircle2, XCircle, Filter } from "lucide-react";
 import { StudentExcelActions } from "@/components/students/StudentExcelActions";
+import { EditStudentModal } from "@/components/students/EditStudentModal";
 
 export default async function SiswaPage({
   searchParams,
@@ -167,23 +168,45 @@ export default async function SiswaPage({
                       )}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <form
-                        action={async () => {
-                          "use server";
-                          await toggleStudentStatusAction(s.id, s.isActive);
-                        }}
-                      >
-                        <button
-                          type="submit"
-                          className={`px-2 py-1 rounded text-[10px] font-bold border transition ${
-                            s.isActive
-                              ? "text-rose-700 border-rose-200 hover:bg-rose-50"
-                              : "text-emerald-700 border-emerald-200 hover:bg-emerald-50"
-                          }`}
+                      <div className="flex items-center justify-end gap-1.5">
+                        {(currentUser?.role === "admin" ||
+                          currentUser?.role === "headmaster" ||
+                          (currentUser?.role === "teacher" &&
+                            (!currentUser.assignedGroupId || currentUser.assignedGroupId === s.groupId))) && (
+                          <EditStudentModal
+                            student={{
+                              id: s.id,
+                              studentCode: s.studentCode,
+                              fullName: s.fullName,
+                              displayName: s.displayName,
+                              classId: s.classId,
+                              groupId: s.groupId,
+                              gender: s.gender,
+                              birthDate: s.birthDate,
+                              guardianName: s.guardianName,
+                              isActive: s.isActive,
+                              notes: s.notes,
+                            }}
+                          />
+                        )}
+                        <form
+                          action={async () => {
+                            "use server";
+                            await toggleStudentStatusAction(s.id, s.isActive);
+                          }}
                         >
-                          {s.isActive ? "Nonaktifkan" : "Aktifkan"}
-                        </button>
-                      </form>
+                          <button
+                            type="submit"
+                            className={`px-2 py-1 rounded text-[11px] font-bold border transition ${
+                              s.isActive
+                                ? "text-rose-700 border-rose-200 hover:bg-rose-50"
+                                : "text-emerald-700 border-emerald-200 hover:bg-emerald-50"
+                            }`}
+                          >
+                            {s.isActive ? "Nonaktifkan" : "Aktifkan"}
+                          </button>
+                        </form>
+                      </div>
                     </td>
                   </tr>
                 );
