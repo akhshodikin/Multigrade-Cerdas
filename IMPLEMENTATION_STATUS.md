@@ -9,13 +9,14 @@ Dokumen ini melacak status kemajuan pengembangan secara transparan, akurat, dan 
 
 ```mermaid
 pie title Status Fitur Proyek
-    "Fondasi & Manajemen Sekolah" : 14.2
-    "Bank Kurikulum Multigrade" : 14.2
-    "Mesin Validasi & Persetujuan ATP" : 14.2
-    "Pemetaan Irisan Materi AI" : 14.2
-    "Generator ATP Multigrade, Prota & Promes" : 14.2
-    "Generator Modul Ajar Multigrade AI" : 14.2
-    "LKPD Berdiferensiasi & Media Pembelajaran" : 14.8
+    "Fondasi & Manajemen Sekolah" : 12.5
+    "Bank Kurikulum Multigrade" : 12.5
+    "Mesin Validasi & Persetujuan ATP" : 12.5
+    "Pemetaan Irisan Materi AI" : 12.5
+    "Generator ATP Multigrade, Prota & Promes" : 12.5
+    "Generator Modul Ajar Multigrade AI" : 12.5
+    "LKPD Berdiferensiasi & Media Pembelajaran" : 12.5
+    "Asesmen & Kemajuan Siswa" : 12.5
 ```
 
 ---
@@ -125,16 +126,30 @@ pie title Status Fitur Proyek
 
 ---
 
-### H. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+### H. Modul Asesmen & Kemajuan Belajar Siswa (Tahap 8 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **Asesmen Diagnostik, Formatif, Sumatif & Observasi** | [src/lib/assessment/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/assessment/types.ts), [src/lib/assessment/engine.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/assessment/engine.ts) | **Verified (8/8 tests)** | Sesi asesmen komprehensif terikat pada TP spesifik, kelas asal, kelompok multigrade, mata pelajaran, dan jenis instrumen (rubrik observasi, LKPD, unjuk kerja, portofolio). |
+| **Rubrik 4 Tingkat & KKTP Sekolah Terkonfigurasi** | [src/lib/assessment/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/assessment/types.ts), `src/db/schema.ts` (`school_assessment_criteria`) | **Verified** | 4 tingkat ketercapaian standar: Perlu Bimbingan (0-60), Cukup (61-74), Baik (75-89), Sangat Baik (90-100). Batas ambang tuntas (KKTP) dapat dikonfigurasi per sekolah. |
+| **Pencatatan Observasi & Bukti Belajar Konkret** | [src/components/assessment/AssessmentEntryWorkspace.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/assessment/AssessmentEntryWorkspace.tsx) | **Verified** | Input berbasis bukti nyata (*learning evidence*) seperti respon lisan siswa, hasil kerja mandiri di LKPD, maupun catatan perilaku penguasaan materi tanpa rekayasa. |
+| **Invarian Non-Numerik CP Mastery** | `src/lib/assessment/engine.ts`, `tests/assessment-progress.test.ts` | **Verified** | **Pedagogical Invariant:** Dilarang menyimpulkan penguasaan seluruh CP satu fase hanya berdasarkan satu angka rata-rata numerik. Penguasaan CP dinilai dari akumulasi ketuntasan bukti kualitatif TP. |
+| **Rekomendasi Tindak Lanjut Cerdas (AI / Heuristik)** | [src/lib/assessment/recommendations.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/assessment/recommendations.ts) | **Verified** | Saran diferensiasi otomatis (Remedial manipulatif benda konkret / tutor sebaya vs Pengayaan penalaran HOTS konteks pertanian Bromo). Keputusan akhir mutlak di tangan guru. |
+| **Profil & Riwayat Perkembangan 27 Siswa** | [src/app/dashboard/asesmen/siswa/[id]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/asesmen/siswa/%5Bid%5D/page.tsx), [src/components/assessment/StudentProfileView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/assessment/StudentProfileView.tsx) | **Verified** | Portofolio individual siswa SDN Sedaeng II Tosari (`SDN2-A-01` s/d `SDN2-C-09`), matriks ketuntasan per TP, antrean remedial & pengayaan aktif, serta cetak rapor kemajuan ber-Kop resmi. |
+| **Rekap Ketercapaian TP & Kelompok Multigrade** | [src/app/dashboard/asesmen/tp/[id]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/asesmen/tp/%5Bid%5D/page.tsx), [src/app/dashboard/asesmen/kelompok/[groupId]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/asesmen/kelompok/%5BgroupId%5D/page.tsx) | **Verified** | Rekap ketercapaian per TP (tingkat ketuntasan %, sebaran kriteria, rekomendasi pedagogis alur), serta analisis performa Kelompok A, B, dan C lintas mata pelajaran. |
+| **Audit Trail & Kontrol Akses (RBAC)** | [src/app/actions/assessment.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/assessment.ts) | **Verified** | Setiap pencatatan skor, bukti belajar, atau status selesai tindak lanjut tercatat pada audit logs. Validasi input skema Zod ketat dan proteksi `requireAuth`. |
+
+---
+
+### I. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
 1. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
    - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
-2. **Instrumen Asesmen Formatif & Portofolio Siswa:**
-   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II Tosari dan pelaporan berkala.
+2. **Ekspor Rapor Kurikulum Merdeka (e-Rapor & PDF Terpadu):**
+   - Agregasi deskripsi capaian kompetensi semesteran berbasis TP tuntas untuk cetak buku rapor resmi siswa.
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **74 tests PASSED** dari 10 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **82 tests PASSED** dari 11 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -145,5 +160,6 @@ pie title Status Fitur Proyek
   - `tests/atp-generator.test.ts` (8 passed)
   - `tests/modul-ajar.test.ts` (12 passed)
   - `tests/lkpd-media.test.ts` (12 passed)
+  - `tests/assessment-progress.test.ts` (8 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (32 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (38 rute App Router terkompilasi, First Load JS bersama 103 kB).

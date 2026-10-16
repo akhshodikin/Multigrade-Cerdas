@@ -381,22 +381,81 @@ export const multigradeLessonPlans = pgTable("multigrade_lesson_plans", {
 // 12. Asesmen & Nilai
 export const assessments = pgTable("assessments", {
   id: uuid("id").defaultRandom().primaryKey(),
-  lessonPlanId: uuid("lesson_plan_id").references(() => multigradeLessonPlans.id),
+  lessonPlanId: uuid("lesson_plan_id").references(() => multigradeLessonPlans.id, { onDelete: "set null" }),
   subjectId: text("subject_id").references(() => subjects.id).notNull(),
   classId: integer("class_id").references(() => classes.id).notNull(),
   title: text("title").notNull(),
-  assessmentType: text("assessment_type", { enum: ["formatif", "sumatif", "observasi"] }).notNull(),
+  assessmentType: text("assessment_type", { enum: ["diagnostik", "formatif", "sumatif", "observasi"] }).notNull(),
+  tpId: uuid("tp_id").references(() => tujuanPembelajaran.id, { onDelete: "set null" }),
+  tpCode: text("tp_code"),
+  phase: text("phase"),
+  groupId: text("group_id").references(() => multigradeGroups.id, { onDelete: "set null" }),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  instrumentType: text("instrument_type", {
+    enum: ["rubrik_observasi", "lkpd", "tes_tertulis", "unjuk_kerja", "tes_lisan", "portofolio"],
+  }).default("rubrik_observasi").notNull(),
+  rubricSchema: jsonb("rubric_schema").$type<Array<{
+    criteria: string;
+    perluBimbingan: string;
+    cukup: string;
+    baik: string;
+    sangatBaik: string;
+    maxScore: number;
+  }>>().default([]).notNull(),
+  createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 export const studentAssessmentResults = pgTable("student_assessment_results", {
   id: uuid("id").defaultRandom().primaryKey(),
-  assessmentId: uuid("assessment_id").references(() => assessments.id).notNull(),
-  studentId: uuid("student_id").references(() => students.id).notNull(),
+  assessmentId: uuid("assessment_id").references(() => assessments.id, { onDelete: "cascade" }).notNull(),
+  studentId: uuid("student_id").references(() => students.id, { onDelete: "cascade" }).notNull(),
+  classId: integer("class_id"),
+  subjectId: text("subject_id"),
+  tpId: uuid("tp_id"),
   score: integer("score"),
   masteryLevel: text("mastery_level", { enum: ["perlu_bimbingan", "cukup", "baik", "sangat_baik"] }),
   teacherNotes: text("teacher_notes"),
+  learningEvidence: text("learning_evidence"),
+  evidenceMediaUrl: text("evidence_media_url"),
+  assessorId: uuid("assessor_id").references(() => users.id, { onDelete: "set null" }),
+  assessorName: text("assessor_name"),
+  followUpType: text("follow_up_type", {
+    enum: ["tidak_perlu", "remedial_terbimbing", "remedial_tutor_sebaya", "pengayaan_mandiri", "pengayaan_eksploratif"],
+  }).default("tidak_perlu").notNull(),
+  followUpNotes: text("follow_up_notes"),
+  aiSuggestedFollowUp: text("ai_suggested_follow_up"),
+  followUpCompleted: boolean("follow_up_completed").default(false).notNull(),
+  assessmentDate: text("assessment_date"),
   assessedAt: timestamp("assessed_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 12b. Konfigurasi Kriteria Ketercapaian Sekolah (KKTP & Kebijakan Remedial/Pengayaan SDN SEDAENG II Tosari)
+export const schoolAssessmentCriteria = pgTable("school_assessment_criteria", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  schoolId: integer("school_id").default(1).notNull(),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  passingScoreDefault: integer("passing_score_default").default(70).notNull(),
+  levelsDefinition: jsonb("levels_definition").$type<Array<{
+    level: "perlu_bimbingan" | "cukup" | "baik" | "sangat_baik";
+    label: string;
+    scoreMin: number;
+    scoreMax: number;
+    description: string;
+  }>>().default([
+    { level: "perlu_bimbingan", label: "Perlu Bimbingan (Mulai Berkembang)", scoreMin: 0, scoreMax: 59, description: "Belum mencapai kriteria minimal TP, memerlukan intervensi remedial intensif / tutor sebaya." },
+    { level: "cukup", label: "Cukup (Sedang Berkembang)", scoreMin: 60, scoreMax: 74, description: "Mencapai kriteria dengan sebagian bantuan arahan guru." },
+    { level: "baik", label: "Baik (Berkembang Sesuai Harapan)", scoreMin: 75, scoreMax: 89, description: "Mencapai seluruh indikator TP secara mandiri dan akurat." },
+    { level: "sangat_baik", label: "Sangat Baik (Sangat Berkembang)", scoreMin: 90, scoreMax: 100, description: "Melampaui kriteria TP, bernalar kritis mendalam dan siap menerima pengayaan eksploratif." },
+  ]).notNull(),
+  remedialPolicy: text("remedial_policy").default("Siswa pada level Perlu Bimbingan mendapatkan pendampingan terfokus pada rotasi kelas rangkap atau dipasangkan dengan tutor sebaya.").notNull(),
+  enrichmentPolicy: text("enrichment_policy").default("Siswa pada level Sangat Baik diberikan tugas eksploratif, tantangan studi kasus lokal Tosari, atau peran sebagai tutor sebaya.").notNull(),
+  nonNumericalRuleStatement: text("non_numerical_rule_statement").default("Penguasaan Capaian Pembelajaran (CP) Fase tidak boleh disimpulkan hanya dari satu angka rata-rata, melainkan berdasarkan akumulasi bukti belajar kualitatif per TP.").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
 // 13. Antrean Sinkronisasi Offline

@@ -18,6 +18,7 @@ import {
   BookOpen,
   FileText,
   Image,
+  CheckSquare,
   X,
 } from "lucide-react";
 import { CurrentUser } from "@/lib/auth/session";
@@ -37,6 +38,12 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       items: [
         { name: "Dashboard Utama", href: "/dashboard", icon: LayoutDashboard },
         { name: "Kelompok Belajar Rangkap", href: "/dashboard/kelompok", icon: Layers },
+      ],
+    },
+    {
+      title: "Penilaian & Kemajuan",
+      items: [
+        { name: "Pusat Asesmen Siswa", href: "/dashboard/asesmen", icon: CheckSquare },
       ],
     },
     {
