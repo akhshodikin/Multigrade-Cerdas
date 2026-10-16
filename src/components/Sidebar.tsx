@@ -47,6 +47,12 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       ],
     },
     {
+      title: "Laporan & Ekspor",
+      items: [
+        { name: "Pusat Laporan & Ekspor", href: "/dashboard/laporan", icon: FileDown },
+      ],
+    },
+    {
       title: "Data Sekolah",
       items: [
         { name: "Profil Sekolah", href: "/dashboard/profil-sekolah", icon: School },

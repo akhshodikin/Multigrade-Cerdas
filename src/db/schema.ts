@@ -1,15 +1,15 @@
 import { pgTable, text, timestamp, uuid, integer, boolean, jsonb } from "drizzle-orm/pg-core";
 
-// 1. Profil Sekolah (SDN SEDAENG II Tosari - Singleton Entity)
+// 1. Profil Sekolah (SDN Kandangan I Tosari - Singleton Entity, dapat diatur administrator)
 export const schoolProfile = pgTable("school_profile", {
   id: integer("id").primaryKey(), // ID 1 (Singleton)
-  npsn: text("npsn").notNull().default("20519000"),
-  name: text("name").notNull().default("SDN SEDAENG II Tosari"),
-  address: text("address").notNull().default("Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177"),
-  headmasterName: text("headmaster_name").notNull().default("Kepala Sekolah SDN Sedaeng II"),
+  npsn: text("npsn").notNull().default("20519069"),
+  name: text("name").notNull().default("SDN Kandangan I Tosari"),
+  address: text("address").notNull().default("Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177"),
+  headmasterName: text("headmaster_name").notNull().default("Bambang Sutrisno, S.Pd., M.Pd."),
   headmasterNip: text("headmaster_nip").default("197508122000031002"),
   phone: text("phone").default("081234567890"),
-  email: text("email").default("sdnsedaeng2tosari@gmail.com"),
+  email: text("email").default("sdnkandangan1tosari@gmail.com"),
   activeAcademicYear: text("active_academic_year").notNull().default("2024/2025"),
   activeSemester: text("active_semester").notNull().default("Ganjil"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
@@ -629,3 +629,69 @@ export const learningMediaItems = pgTable("learning_media_items", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
+
+// 24. Jurnal Mengajar Kelas Rangkap (Multigrade Teaching Journals)
+export const teachingJournals = pgTable("teaching_journals", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  date: text("date").notNull(), // e.g. "2024-08-12"
+  groupId: text("group_id").references(() => multigradeGroups.id).notNull(),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  lessonPlanId: uuid("lesson_plan_id").references(() => multigradeLessonPlans.id, { onDelete: "set null" }),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  allocatedHours: integer("allocated_hours").default(2).notNull(), // Jam Pelajaran (JP)
+  lowerGrade: integer("lower_grade").notNull(), // e.g. 1
+  higherGrade: integer("higher_grade").notNull(), // e.g. 2
+  lowerGradeTpCode: text("lower_grade_tp_code"),
+  lowerGradeTpText: text("lower_grade_tp_text"),
+  higherGradeTpCode: text("higher_grade_tp_code"),
+  higherGradeTpText: text("higher_grade_tp_text"),
+  rotationActivityDescription: text("rotation_activity_description").notNull(),
+  attendancePresent: integer("attendance_present").default(0).notNull(),
+  attendanceSick: integer("attendance_sick").default(0).notNull(),
+  attendancePermit: integer("attendance_permit").default(0).notNull(),
+  attendanceAbsent: integer("attendance_absent").default(0).notNull(),
+  learningEvidenceSummary: text("learning_evidence_summary"),
+  challengesEncountered: text("challenges_encountered"),
+  teacherReflection: text("teacher_reflection").notNull(),
+  nextActionPlan: text("next_action_plan").notNull(),
+  teacherId: uuid("teacher_id").references(() => users.id, { onDelete: "set null" }),
+  teacherName: text("teacher_name"),
+  verifiedByHeadmaster: boolean("verified_by_headmaster").default(false).notNull(),
+  verifiedAt: timestamp("verified_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 25. Riwayat Versi Ekspor Dokumen & Laporan (Report Export History & Versioning)
+export const reportExportHistory = pgTable("report_export_history", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reportType: text("report_type", {
+    enum: [
+      "atp_multigrade",
+      "irisan_materi",
+      "modul_ajar",
+      "lkpd",
+      "jurnal_mengajar",
+      "rekap_asesmen",
+      "kemajuan_siswa",
+      "ketercapaian_tp",
+      "daftar_tindak_lanjut",
+      "ringkasan_kepala_sekolah",
+    ],
+  }).notNull(),
+  title: text("title").notNull(),
+  format: text("format", { enum: ["pdf", "docx", "xlsx", "print_html"] }).notNull(),
+  version: integer("version").default(1).notNull(),
+  targetEntityId: text("target_entity_id"),
+  filterParameters: jsonb("filter_parameters").$type<Record<string, unknown>>().default({}).notNull(),
+  fileSizeBytes: integer("file_size_bytes").default(0).notNull(),
+  checksum: text("checksum"), // SHA-256
+  status: text("status", { enum: ["success", "failed"] }).default("success").notNull(),
+  errorMessage: text("error_message"),
+  generatedById: uuid("generated_by_id").references(() => users.id, { onDelete: "set null" }),
+  generatedByName: text("generated_by_name"),
+  generatedByRole: text("generated_by_role"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+

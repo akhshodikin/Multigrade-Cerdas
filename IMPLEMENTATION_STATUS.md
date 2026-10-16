@@ -9,14 +9,15 @@ Dokumen ini melacak status kemajuan pengembangan secara transparan, akurat, dan 
 
 ```mermaid
 pie title Status Fitur Proyek
-    "Fondasi & Manajemen Sekolah" : 12.5
-    "Bank Kurikulum Multigrade" : 12.5
-    "Mesin Validasi & Persetujuan ATP" : 12.5
-    "Pemetaan Irisan Materi AI" : 12.5
-    "Generator ATP Multigrade, Prota & Promes" : 12.5
-    "Generator Modul Ajar Multigrade AI" : 12.5
-    "LKPD Berdiferensiasi & Media Pembelajaran" : 12.5
-    "Asesmen & Kemajuan Siswa" : 12.5
+    "Fondasi & Manajemen Sekolah" : 11.1
+    "Bank Kurikulum Multigrade" : 11.1
+    "Mesin Validasi & Persetujuan ATP" : 11.1
+    "Pemetaan Irisan Materi AI" : 11.1
+    "Generator ATP Multigrade, Prota & Promes" : 11.1
+    "Generator Modul Ajar Multigrade AI" : 11.1
+    "LKPD Berdiferensiasi & Media Pembelajaran" : 11.1
+    "Asesmen & Kemajuan Siswa" : 11.1
+    "Laporan & Ekspor Multi-Format" : 11.2
 ```
 
 ---
@@ -140,16 +141,31 @@ pie title Status Fitur Proyek
 
 ---
 
-### I. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+### I. Modul Laporan dan Ekspor Multigrade Cerdas AI (Tahap 9 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **10 Jenis Laporan Dokumen Nyata** | [src/lib/reports/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/types.ts), [src/lib/reports/data-fetchers.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/data-fetchers.ts) | **Verified (7/7 tests)** | 1) ATP per kelas & kelompok, 2) Pemetaan irisan TP, 3) Modul ajar, 4) LKPD berdiferensiasi, 5) Jurnal mengajar harian, 6) Rekap asesmen, 7) Kemajuan belajar siswa, 8) Rekap ketercapaian TP, 9) Daftar tindak lanjut, 10) Ringkasan kepala sekolah. Semua ditarik langsung dari database tanpa data contoh fiktif. |
+| **Identitas Resmi SDN Kandangan I Tosari** | [src/lib/reports/data-fetchers.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/data-fetchers.ts) (`getOfficialSchoolHeader`) | **Verified** | Menggunakan identitas resmi SDN Kandangan I Tosari (NPSN 20519069, Dusun Kandangan, Tosari) yang tersimpan dinamis di database dan dapat diatur administrator. |
+| **Format Cetak PDF A4 & Layout Responsif** | [src/lib/reports/generators/pdf-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/generators/pdf-generator.ts) (`jsPDF` + `autoTable`) | **Verified** | Berkas binary PDF A4 (`%PDF`), nomor halaman dinamis, margin rapi, kop resmi, penanganan tabel panjang otomatis, dan blok tanda tangan Kepala Sekolah & Guru. |
+| **Format Penyuntingan Dokumen DOCX** | [src/lib/reports/generators/docx-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/generators/docx-generator.ts) (`docx` library) | **Verified** | Berkas binary Word DOCX (`504b0304`), tabel bordered, heading, footer penomoran halaman, dan blok tanda tangan dua kolom. |
+| **Format Rekap Tabular Excel XLSX** | [src/lib/reports/generators/xlsx-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/generators/xlsx-generator.ts) (`xlsx` SheetJS) | **Verified** | Berkas spreadsheet XLSX multi-sheet, header berlatar, penyesuaian lebar kolom otomatis, dan format angka terstruktur. |
+| **Pelacakan Versi Dokumen & Integritas Hash** | [src/lib/reports/version-tracker.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/version-tracker.ts) | **Verified** | Penyimpanan riwayat versi bertahap ke tabel `report_export_history` beserta ukuran berkas dan hash SHA-256. Aturan ketat: pembuatan berkas gagal tidak akan dilaporkan sebagai selesai. |
+| **Proteksi Hak Akses (RBAC) Laporan Siswa** | [src/lib/reports/data-fetchers.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/reports/data-fetchers.ts) (`fetchStudentProgressReportData`) | **Verified** | Guru hanya berwenang mengakses laporan kemajuan siswa dari kelompok belajarnya sendiri. Akses ke kelompok lain diblokir (403), sedangkan Kepala Sekolah & Admin memiliki akses penuh. |
+| **Jurnal Mengajar Kelas Rangkap** | [src/app/actions/reports.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/reports.ts), `src/db/schema.ts` (`teaching_journals`) | **Verified** | Pencatatan harian rotasi mengajar kelas rangkap, kehadiran siswa (hadir/sakit/izin/alpa), temuan bukti belajar, refleksi guru, rencana tindak lanjut, dan verifikasi Kepala Sekolah. |
+| **Layar Workspace Pusat Laporan & Ekspor** | [src/app/dashboard/laporan/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/laporan/page.tsx), [src/components/reports/ReportHubWorkspace.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/reports/ReportHubWorkspace.tsx) | **Verified** | Antarmuka interaktif responsif HP & laptop dengan 10 tab pemilih dokumen, live preview simulasi kertas A4, tombol unduh 3 format (PDF, DOCX, XLSX), dan tab riwayat versi. |
+
+---
+
+### J. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
 1. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
    - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
-2. **Ekspor Rapor Kurikulum Merdeka (e-Rapor & PDF Terpadu):**
-   - Agregasi deskripsi capaian kompetensi semesteran berbasis TP tuntas untuk cetak buku rapor resmi siswa.
+2. **Sinkronisasi Dapodik & Integrasi e-Rapor Nasional Kemendikbudristek:**
+   - Pertukaran data kurikulum dan capaian pembelajaran semesteran secara terstandar nasional.
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **82 tests PASSED** dari 11 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **89 tests PASSED** dari 12 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -161,5 +177,6 @@ pie title Status Fitur Proyek
   - `tests/modul-ajar.test.ts` (12 passed)
   - `tests/lkpd-media.test.ts` (12 passed)
   - `tests/assessment-progress.test.ts` (8 passed)
+  - `tests/reports-export.test.ts` (7 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (38 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (40 rute App Router terkompilasi, First Load JS bersama 103 kB).

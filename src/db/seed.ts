@@ -11,17 +11,24 @@ export async function runSeed() {
   if (existingProfile.length === 0) {
     await db.insert(schema.schoolProfile).values({
       id: 1,
-      npsn: "20519000",
-      name: "SDN SEDAENG II Tosari",
-      address: "Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
+      npsn: "20519069",
+      name: "SDN Kandangan I Tosari",
+      address: "Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
       headmasterName: "Bambang Sutrisno, S.Pd., M.Pd.",
       headmasterNip: "197508122000031002",
       phone: "081234567890",
-      email: "sdnsedaeng2tosari@gmail.com",
+      email: "sdnkandangan1tosari@gmail.com",
       activeAcademicYear: "2024/2025",
       activeSemester: "Ganjil",
     });
-    console.log("✓ Profil SDN SEDAENG II Tosari tersimpan.");
+    console.log("✓ Profil SDN Kandangan I Tosari tersimpan.");
+  } else {
+    await db.update(schema.schoolProfile).set({
+      name: "SDN Kandangan I Tosari",
+      npsn: "20519069",
+      address: "Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
+      email: "sdnkandangan1tosari@gmail.com",
+    }).where(eq(schema.schoolProfile.id, 1));
   }
 
   // 2. Tahun Ajaran & Semester
@@ -462,6 +469,67 @@ export async function runSeed() {
     ]);
 
     console.log("✓ Tujuan Pembelajaran (TP) & Alur Tujuan Pembelajaran (ATP) terpadu tersimpan.");
+  }
+
+  // 13. Jurnal Mengajar Kelas Rangkap Awal
+  const existingJournals = await db.select().from(schema.teachingJournals);
+  if (existingJournals.length === 0) {
+    const teacherA = await db.query.users.findFirst({ where: eq(schema.users.assignedGroupId, "group-a") });
+    const teacherB = await db.query.users.findFirst({ where: eq(schema.users.assignedGroupId, "group-b") });
+
+    await db.insert(schema.teachingJournals).values([
+      {
+        date: "2024-08-12",
+        groupId: "group-a",
+        subjectId: "matematika",
+        allocatedHours: 2,
+        lowerGrade: 1,
+        higherGrade: 2,
+        lowerGradeTpCode: "TP-MAT-1.1",
+        lowerGradeTpText: "Membilang dan menyusun banyak benda konkret 1 sampai dengan 20.",
+        higherGradeTpCode: "TP-MAT-2.1",
+        higherGradeTpText: "Menentukan nilai tempat puluhan dan satuan bilangan cacah sampai 100.",
+        rotationActivityDescription: "Guru memulai dengan apersepsi menghitung komoditas sayur lereng Bromo bersama. Putaran 1: Guru membimbing Kelas 1 memanipulasi kartu hitung wortel, sementara Kelas 2 mengeksplorasi LKPD nilai tempat puluhan secara mandiri. Putaran 2: Guru berpindah membimbing Kelas 2 menganalisis balok puluhan, sedangkan Kelas 1 berpasangan menyusun pasangan kartu bilangan.",
+        attendancePresent: 9,
+        attendanceSick: 0,
+        attendancePermit: 0,
+        attendanceAbsent: 0,
+        learningEvidenceSummary: "8 dari 9 siswa menyelesaikan lembar kerja mandiri. 1 siswa (SDN2-A-01) memerlukan penguatan konsep membilang belasan.",
+        challengesEncountered: "Transisi perpindahan bimbingan guru memerlukan sinyal lonceng mini agar siswa Kelas 1 tetap fokus.",
+        teacherReflection: "Model rotasi staggered instruction berjalan tertib. Tutor sebaya Kelas 2 sangat membantu mendisiplinkan ruang belajar.",
+        nextActionPlan: "Lanjutkan latihan penjumlahan sederhana dan berikan pengayaan kartu bilangan tiga angka bagi yang telah tuntas.",
+        teacherId: teacherA?.id,
+        teacherName: teacherA?.name || "Rina Wulandari, S.Pd.",
+        verifiedByHeadmaster: true,
+        verifiedAt: new Date("2024-08-13T08:00:00Z"),
+      },
+      {
+        date: "2024-08-14",
+        groupId: "group-b",
+        subjectId: "ipas",
+        allocatedHours: 2,
+        lowerGrade: 3,
+        higherGrade: 4,
+        lowerGradeTpCode: "TP-IPAS-3.1",
+        lowerGradeTpText: "Mengidentifikasi bagian tubuh tumbuhan (akar, batang, daun, bunga) dan fungsinya.",
+        higherGradeTpCode: "TP-IPAS-4.1",
+        higherGradeTpText: "Menganalisis proses fotosintesis pada tumbuhan dan kaitannya dengan ekosistem pegunungan.",
+        rotationActivityDescription: "Pembukaan di halaman sekolah mengamati tanaman kubis dan cemara gunung. Siswa Kelas 3 menggambar struktur tanaman nyata, sementara Kelas 4 membaca teks saintifik fotosintesis dan membuat bagan alir proses cahaya.",
+        attendancePresent: 8,
+        attendanceSick: 1,
+        attendancePermit: 0,
+        attendanceAbsent: 0,
+        learningEvidenceSummary: "Karya gambar struktur tumbuhan Kelas 3 sangat detail; Kelas 4 mampu menjelaskan fungsi klorofil dengan contoh nyata di lereng Bromo.",
+        challengesEncountered: "Udara berkabut dingin di pagi hari, kegiatan observasi luar kelas disesuaikan 15 menit.",
+        teacherReflection: "Siswa sangat antusias belajar langsung dari alam lingkungan Kandangan Tosari.",
+        nextActionPlan: "Presentasi kelompok silang kelas 3 dan 4 pada pertemuan berikutnya.",
+        teacherId: teacherB?.id,
+        teacherName: teacherB?.name || "Joko Prasetyo, S.Pd.",
+        verifiedByHeadmaster: true,
+        verifiedAt: new Date("2024-08-15T09:00:00Z"),
+      },
+    ]);
+    console.log("✓ Jurnal mengajar kelas rangkap awal tersimpan.");
   }
 
   console.log("Pengisian data awal (seed sintetis & bank kurikulum) selesai dengan sukses!");
