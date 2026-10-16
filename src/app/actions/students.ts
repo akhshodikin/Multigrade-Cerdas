@@ -8,6 +8,7 @@ import { recordAuditLog } from "@/lib/audit/logger";
 import { studentSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 import { getGroupIdForClass } from "@/lib/multigrade";
+import { parseStudentsXlsx } from "@/lib/excel/students-excel";
 
 export async function createStudentAction(formData: FormData) {
   const currentUser = await requireAuth(["admin", "headmaster", "teacher"]);
@@ -218,5 +219,120 @@ export async function toggleStudentStatusAction(studentId: string, currentStatus
   return {
     success: true,
     message: `Status siswa berhasil diubah menjadi ${!currentStatus ? "Aktif" : "Nonaktif"}.`,
+  };
+}
+
+export async function importStudentsFromXlsxAction(formData: FormData) {
+  const currentUser = await requireAuth(["admin", "headmaster", "teacher"]);
+
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) {
+    return { success: false, message: "Berkas Excel belum dipilih atau kosong." };
+  }
+
+  // Batas ukuran 15 MB
+  const MAX_FILE_SIZE = 15 * 1024 * 1024;
+  if (file.size > MAX_FILE_SIZE) {
+    return { success: false, message: "Ukuran berkas melebihi batas maksimal 15 MB." };
+  }
+
+  const fileName = file.name.toLowerCase();
+  if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".xls")) {
+    return { success: false, message: "Format berkas tidak valid. Harap unggah berkas Excel (.xlsx atau .xls)." };
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  const { validRows, errors } = parseStudentsXlsx(buffer);
+
+  if (errors.length > 0 && validRows.length === 0) {
+    return { success: false, message: "Gagal memproses berkas Excel.", errors };
+  }
+
+  if (validRows.length === 0) {
+    return { success: false, message: "Tidak ada baris data siswa yang valid ditemukan dalam berkas." };
+  }
+
+  // Jika guru, pastikan semua siswa yang diimpor sesuai dengan kelompok penugasannya
+  if (currentUser.role === "teacher" && currentUser.assignedGroupId) {
+    const invalidGroupRow = validRows.find((r) => r.groupId !== currentUser.assignedGroupId);
+    if (invalidGroupRow) {
+      return {
+        success: false,
+        message: `FORBIDDEN: Anda hanya berwenang mengelola siswa ${currentUser.assignedGroupId}. Baris siswa '${invalidGroupRow.studentCode}' (${invalidGroupRow.fullName}) berada di ${invalidGroupRow.groupId}.`,
+      };
+    }
+  }
+
+  let insertedCount = 0;
+  let updatedCount = 0;
+
+  for (const row of validRows) {
+    const existing = await db
+      .select()
+      .from(schema.students)
+      .where(eq(schema.students.studentCode, row.studentCode));
+
+    if (existing.length > 0) {
+      await db
+        .update(schema.students)
+        .set({
+          fullName: row.fullName,
+          displayName: row.displayName,
+          classId: row.classId,
+          groupId: row.groupId,
+          gender: row.gender,
+          birthDate: row.birthDate || existing[0].birthDate,
+          guardianName: row.guardianName || existing[0].guardianName,
+          isActive: row.isActive,
+          notes: row.notes || existing[0].notes,
+          updatedAt: new Date(),
+        })
+        .where(eq(schema.students.studentCode, row.studentCode));
+      updatedCount++;
+    } else {
+      await db.insert(schema.students).values({
+        studentCode: row.studentCode,
+        fullName: row.fullName,
+        displayName: row.displayName,
+        classId: row.classId,
+        groupId: row.groupId,
+        gender: row.gender,
+        birthDate: row.birthDate || null,
+        guardianName: row.guardianName || null,
+        isActive: row.isActive,
+        notes: row.notes || null,
+      });
+      insertedCount++;
+    }
+  }
+
+  await recordAuditLog({
+    userId: currentUser.id,
+    userName: currentUser.name,
+    userRole: currentUser.role,
+    action: "IMPORT_STUDENTS_XLSX",
+    targetEntity: "student",
+    details: {
+      fileName: file.name,
+      totalRows: validRows.length,
+      insertedCount,
+      updatedCount,
+      warningErrors: errors,
+    },
+  });
+
+  revalidatePath("/dashboard/siswa");
+  revalidatePath("/dashboard/kelompok");
+  revalidatePath("/dashboard");
+
+  return {
+    success: true,
+    message: `Berhasil memproses ${validRows.length} data siswa (${insertedCount} siswa baru ditambahkan, ${updatedCount} siswa diperbarui).`,
+    count: validRows.length,
+    insertedCount,
+    updatedCount,
+    warnings: errors.length > 0 ? errors : undefined,
   };
 }

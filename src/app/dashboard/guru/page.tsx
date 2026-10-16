@@ -4,6 +4,7 @@ import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { createUserAction, toggleUserStatusAction } from "@/app/actions/users";
 import { Users, UserPlus, Shield, CheckCircle2, XCircle } from "lucide-react";
+import { UserExcelActions } from "@/components/users/UserExcelActions";
 
 export default async function GuruPage() {
   const currentUser = await getCurrentUser();
@@ -20,17 +21,20 @@ export default async function GuruPage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Data Guru &amp; Tenaga Pendidik
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Pengelolaan guru pengampu kelas rangkap (Kelompok A, B, C) SDN SEDAENG II Tosari
+            Pengelolaan guru pengampu kelas rangkap (Kelompok A, B, C) SDN Kandangan I Tosari
           </p>
         </div>
-        <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700">
-          <Users className="w-6 h-6" />
+        <div className="flex items-center gap-3">
+          <UserExcelActions isAdmin={isAdmin} />
+          <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 hidden sm:block">
+            <Users className="w-6 h-6" />
+          </div>
         </div>
       </div>
 

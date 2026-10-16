@@ -5,6 +5,7 @@ import * as schema from "@/db/schema";
 import { asc, eq } from "drizzle-orm";
 import { createStudentAction, toggleStudentStatusAction } from "@/app/actions/students";
 import { GraduationCap, UserPlus, CheckCircle2, XCircle, Filter } from "lucide-react";
+import { StudentExcelActions } from "@/components/students/StudentExcelActions";
 
 export default async function SiswaPage({
   searchParams,
@@ -36,17 +37,24 @@ export default async function SiswaPage({
 
   return (
     <div className="space-y-6 max-w-6xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Data Siswa SDN SEDAENG II Tosari
+            Data Siswa SDN Kandangan I Tosari
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Data 27 siswa terdaftar beserta pemetaan kelas asal (1 s/d 6) dan kelompok kelas rangkap (A, B, C)
+            Data siswa terdaftar beserta pemetaan kelas asal (1 s/d 6) dan kelompok kelas rangkap (A, B, C)
           </p>
         </div>
-        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-700">
-          <GraduationCap className="w-6 h-6" />
+        <div className="flex items-center gap-3">
+          <StudentExcelActions
+            canImport={currentUser?.role === "admin" || currentUser?.role === "headmaster" || currentUser?.role === "teacher"}
+            filterKelas={filterKelas}
+            filterKelompok={filterKelompok}
+          />
+          <div className="p-2.5 rounded-xl bg-blue-50 text-blue-700 hidden sm:block">
+            <GraduationCap className="w-6 h-6" />
+          </div>
         </div>
       </div>
 

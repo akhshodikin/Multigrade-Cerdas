@@ -7,6 +7,7 @@ import { requireAuth, hashPassword } from "@/lib/auth/session";
 import { recordAuditLog } from "@/lib/audit/logger";
 import { userSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
+import { parseUsersXlsx } from "@/lib/excel/users-excel";
 
 export async function createUserAction(formData: FormData) {
   const currentUser = await requireAuth(["admin"]);
@@ -189,5 +190,124 @@ export async function toggleUserStatusAction(userId: string, currentStatus: bool
   return {
     success: true,
     message: `Status akun berhasil diubah menjadi ${!currentStatus ? "Aktif" : "Nonaktif"}.`,
+  };
+}
+
+export async function importUsersFromXlsxAction(formData: FormData) {
+  const currentUser = await requireAuth(["admin"]);
+
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) {
+    return { success: false, message: "Berkas Excel belum dipilih atau kosong." };
+  }
+
+  // Batas ukuran 15 MB
+  const MAX_FILE_SIZE = 15 * 1024 * 1024;
+  if (file.size > MAX_FILE_SIZE) {
+    return { success: false, message: "Ukuran berkas melebihi batas maksimal 15 MB." };
+  }
+
+  const fileName = file.name.toLowerCase();
+  if (!fileName.endsWith(".xlsx") && !fileName.endsWith(".xls")) {
+    return { success: false, message: "Format berkas tidak valid. Harap unggah berkas Excel (.xlsx atau .xls)." };
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  const { validRows, errors } = parseUsersXlsx(buffer);
+
+  if (errors.length > 0 && validRows.length === 0) {
+    return { success: false, message: "Gagal memproses berkas Excel.", errors };
+  }
+
+  if (validRows.length === 0) {
+    return { success: false, message: "Tidak ada baris data guru/staf yang valid ditemukan dalam berkas." };
+  }
+
+  let insertedCount = 0;
+  let updatedCount = 0;
+
+  for (const row of validRows) {
+    const existing = await db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.email, row.email.toLowerCase().trim()));
+
+    if (existing.length > 0) {
+      await db
+        .update(schema.users)
+        .set({
+          name: row.name,
+          role: row.role,
+          nip: row.nip || existing[0].nip,
+          phone: row.phone || existing[0].phone,
+          assignedGroupId: row.assignedGroupId !== undefined ? row.assignedGroupId : existing[0].assignedGroupId,
+          isActive: row.isActive,
+          updatedAt: new Date(),
+        })
+        .where(eq(schema.users.email, row.email.toLowerCase().trim()));
+
+      if (row.assignedGroupId && row.role === "teacher") {
+        await db
+          .update(schema.multigradeGroups)
+          .set({ leadTeacherId: existing[0].id })
+          .where(eq(schema.multigradeGroups.id, row.assignedGroupId));
+      }
+
+      updatedCount++;
+    } else {
+      const passwordHash = await hashPassword(row.initialPassword || "Sedaeng2#Tosari");
+      const [newUser] = await db
+        .insert(schema.users)
+        .values({
+          name: row.name,
+          email: row.email.toLowerCase().trim(),
+          passwordHash,
+          role: row.role,
+          nip: row.nip || null,
+          phone: row.phone || null,
+          assignedGroupId: row.assignedGroupId || null,
+          isActive: row.isActive,
+        })
+        .returning();
+
+      if (row.assignedGroupId && row.role === "teacher") {
+        await db
+          .update(schema.multigradeGroups)
+          .set({ leadTeacherId: newUser.id })
+          .where(eq(schema.multigradeGroups.id, row.assignedGroupId));
+      }
+
+      insertedCount++;
+    }
+  }
+
+  await recordAuditLog({
+    userId: currentUser.id,
+    userName: currentUser.name,
+    userRole: currentUser.role,
+    action: "IMPORT_USERS_XLSX",
+    targetEntity: "user",
+    details: {
+      fileName: file.name,
+      totalRows: validRows.length,
+      insertedCount,
+      updatedCount,
+      warningErrors: errors,
+    },
+  });
+
+  revalidatePath("/dashboard/guru");
+  revalidatePath("/dashboard/kelompok");
+  revalidatePath("/dashboard");
+
+  return {
+    success: true,
+    message: `Berhasil memproses ${validRows.length} data pendidik/staf (${insertedCount} pengguna baru, ${updatedCount} diperbarui).`,
+    count: validRows.length,
+    insertedCount,
+    updatedCount,
+    warnings: errors.length > 0 ? errors : undefined,
   };
 }
