@@ -193,6 +193,16 @@ export async function toggleUserStatusAction(userId: string, currentStatus: bool
   };
 }
 
+export async function toggleUserStatusFormAction(formData: FormData): Promise<void> {
+  const userId = String(formData.get("userId"));
+  const currentStatus = formData.get("currentStatus") === "true";
+  await toggleUserStatusAction(userId, currentStatus);
+}
+
+export async function createUserFormAction(formData: FormData): Promise<void> {
+  await createUserAction(formData);
+}
+
 export async function importUsersFromXlsxAction(formData: FormData) {
   const currentUser = await requireAuth(["admin"]);
 

@@ -222,6 +222,16 @@ export async function toggleStudentStatusAction(studentId: string, currentStatus
   };
 }
 
+export async function toggleStudentStatusFormAction(formData: FormData): Promise<void> {
+  const studentId = String(formData.get("studentId"));
+  const currentStatus = formData.get("currentStatus") === "true";
+  await toggleStudentStatusAction(studentId, currentStatus);
+}
+
+export async function createStudentFormAction(formData: FormData): Promise<void> {
+  await createStudentAction(formData);
+}
+
 export async function importStudentsFromXlsxAction(formData: FormData) {
   const currentUser = await requireAuth(["admin", "headmaster", "teacher"]);
 

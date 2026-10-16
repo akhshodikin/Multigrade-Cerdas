@@ -2,7 +2,7 @@ import React from "react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
-import { createUserAction, toggleUserStatusAction } from "@/app/actions/users";
+import { createUserFormAction, toggleUserStatusFormAction } from "@/app/actions/users";
 import { Users, UserPlus, Shield, CheckCircle2, XCircle } from "lucide-react";
 import { UserExcelActions } from "@/components/users/UserExcelActions";
 import { EditUserModal } from "@/components/users/EditUserModal";
@@ -116,12 +116,9 @@ export default async function GuruPage() {
                             isAdmin={isAdmin}
                           />
                           {u.id !== currentUser.id && (
-                            <form
-                              action={async () => {
-                                "use server";
-                                await toggleUserStatusAction(u.id, u.isActive);
-                              }}
-                            >
+                            <form action={toggleUserStatusFormAction}>
+                              <input type="hidden" name="userId" value={u.id} />
+                              <input type="hidden" name="currentStatus" value={String(u.isActive)} />
                               <button
                                 type="submit"
                                 className={`px-2 py-1 rounded text-[11px] font-bold border transition ${
@@ -154,10 +151,7 @@ export default async function GuruPage() {
           </h3>
 
           <form
-            action={async (formData: FormData) => {
-              "use server";
-              await createUserAction(formData);
-            }}
+            action={createUserFormAction}
             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
           >
             <div>
