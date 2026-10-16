@@ -190,8 +190,13 @@ export const atpPlans = pgTable("atp_plans", {
   title: text("title").notNull(),
   subjectId: text("subject_id").references(() => subjects.id).notNull(),
   phase: text("phase", { enum: ["Fase A", "Fase B", "Fase C"] }).notNull(),
+  groupId: text("group_id").references(() => multigradeGroups.id), // e.g. "group-a", "group-b", "group-c"
+  targetGrade: integer("target_grade"), // null = multigrade group (both classes), 1-6 = single class ATP
+  semester: text("semester", { enum: ["Semua", "Ganjil", "Genap"] }).default("Semua").notNull(),
   academicYear: text("academic_year").default("2024/2025").notNull(),
   totalHours: integer("total_hours").default(72).notNull(),
+  effectiveWeeks: integer("effective_weeks").default(36).notNull(),
+  description: text("description"),
   status: text("status", { enum: ["draft", "in_review", "approved", "rejected", "in_use"] }).default("draft").notNull(),
   rejectionNotes: text("rejection_notes"),
   inUseAt: timestamp("in_use_at", { withTimezone: true }),
@@ -212,7 +217,12 @@ export const atpItems = pgTable("atp_items", {
   allocatedHours: integer("allocated_hours").default(4).notNull(),
   targetGrade: integer("target_grade").notNull(),
   semester: text("semester", { enum: ["Ganjil", "Genap"] }).notNull(),
+  startWeek: integer("start_week").default(1).notNull(),
+  endWeek: integer("end_week").default(2).notNull(),
+  monthName: text("month_name"),
+  multigradeStrategy: text("multigrade_strategy", { enum: ["terpadu_sebagian", "terpisah_paralel", "terpadu_penuh", "mandiri"] }).default("terpadu_sebagian"),
   multigradeNotes: text("multigrade_notes"), // Catatan pembelajaran kelas rangkap
+  pairedTpId: uuid("paired_tp_id").references(() => tujuanPembelajaran.id, { onDelete: "set null" }),
 });
 
 // 15. Prasyarat Pembelajaran (TP Prerequisites)
@@ -366,4 +376,17 @@ export const aiUsageLogs = pgTable("ai_usage_logs", {
   errorMessage: text("error_message"),
   userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 21. Kalender Pendidikan & Pekan Efektif SDN SEDAENG II Tosari
+export const academicCalendars = pgTable("academic_calendars", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).notNull(),
+  title: text("title").notNull(),
+  effectiveWeeksCount: integer("effective_weeks_count").default(18).notNull(),
+  nonEffectiveWeeksCount: integer("non_effective_weeks_count").default(2).notNull(),
+  events: jsonb("events").$type<Array<{ name: string; dateRange: string; type: string }>>().default([]).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });

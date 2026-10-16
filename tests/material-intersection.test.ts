@@ -353,7 +353,9 @@ describe("Pengujian Pemetaan Irisan Materi Multigrade Cerdas AI", () => {
       // Buat session mock dengan role guru
       const res = await generateMaterialIntersectionAction(piiInput);
       expect(res.success).toBe(false);
-      expect(res.error).toContain("data pribadi");
+      if (!res.success) {
+        expect(res.error).toContain("data pribadi");
+      }
     });
 
     it("harus menolak jika TP ID yang dipilih tidak ditemukan di database resmi", async () => {
@@ -367,7 +369,9 @@ describe("Pengujian Pemetaan Irisan Materi Multigrade Cerdas AI", () => {
 
       const res = await generateMaterialIntersectionAction(invalidTpInput);
       expect(res.success).toBe(false);
-      expect(res.error).toContain("tidak ditemukan di database resmi");
+      if (!res.success) {
+        expect(res.error).toContain("tidak ditemukan di database resmi");
+      }
     });
   });
 

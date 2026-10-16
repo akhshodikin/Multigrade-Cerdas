@@ -9,10 +9,11 @@ Dokumen ini melacak status kemajuan pengembangan secara transparan, akurat, dan 
 
 ```mermaid
 pie title Status Fitur Proyek
-    "Fondasi & Manajemen Sekolah (Selesai & Lolos Uji)" : 30
-    "Bank Kurikulum Multigrade (Selesai & Lolos Uji)" : 30
-    "Mesin Validasi & Persetujuan ATP (Selesai & Lolos Uji)" : 25
-    "Modul Ajar AI & Offline Sync (Tahap Berikutnya)" : 15
+    "Fondasi & Manajemen Sekolah (Selesai & Lolos Uji)" : 20
+    "Bank Kurikulum Multigrade (Selesai & Lolos Uji)" : 20
+    "Mesin Validasi & Persetujuan ATP (Selesai & Lolos Uji)" : 20
+    "Pemetaan Irisan Materi AI (Selesai & Lolos Uji)" : 20
+    "Generator ATP Multigrade, Prota & Promes (Selesai & Lolos Uji)" : 20
 ```
 
 ---
@@ -24,7 +25,7 @@ pie title Status Fitur Proyek
 |---|---|---|---|
 | **Autentikasi & Keamanan Sesi** | [src/lib/auth/session.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/auth/session.ts), [src/app/actions/auth.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/auth.ts), [src/app/login/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/login/page.tsx) | **Verified (Unit & Integration Pass)** | Login, logout, hashing bcrypt, token sesi di database PostgreSQL, HTTP-only secure cookie, auto-lock timeout. |
 | **Role-Based Access Control (RBAC)** | [src/lib/auth/session.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/auth/session.ts) (`requireAuth`) | **Verified** | Pembatasan hak akses Administrator, Kepala Sekolah, dan Guru Pengampu divalidasi langsung di sisi server. |
-| **Profil SDN SEDAENG II Tosari** | [src/app/dashboard/profil-sekolah/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/profil-sekolah/page.tsx), [src/app/actions/school.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/school.ts) | **Verified** | Tampilan & formulir pengubahan profil sekolah (NPSN 20519000, alamat Tosari, Kepala Sekolah, kontak, TA & semester aktif). |
+| **Profil SDN SEDAENG II Tosari** | [src/app/dashboard/profil-sekolah/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/profil-sekolah/page.tsx), [src/app/actions/school.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/school.ts) | **Verified** | Tampilan & formulir pengubahan profil sekolah (NPSN 20519070, alamat Tosari, Kepala Sekolah, kontak, TA & semester aktif). |
 | **Tahun Ajaran & Semester** | [src/app/dashboard/pengaturan-semester/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/pengaturan-semester/page.tsx) | **Verified** | Pengelolaan periode akademik aktif, aktivasi semester ganjil/genap, dan sinkronisasi ke profil sekolah. |
 | **3 Kelompok Pembelajaran Multigrade** | [src/app/dashboard/kelompok/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kelompok/page.tsx), [src/lib/multigrade.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/multigrade.ts) | **Verified** | Kelompok A (Kls 1-2 &bull; Fase A), Kelompok B (Kls 3-4 &bull; Fase B), Kelompok C (Kls 5-6 &bull; Fase C). |
 | **Data Kelas 1 sampai 6** | `src/db/schema.ts`, `src/db/seed.ts` | **Verified** | Seluruh 6 tingkatan kelas terpetakan secara ketat dan konsisten ke kelompok multigrade masing-masing. |
@@ -77,18 +78,32 @@ pie title Status Fitur Proyek
 
 ---
 
-### E. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+### E. Generator ATP Multigrade, Prota & Promes (Tahap 5 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **Mesin Generator ATP Multigrade** | [src/lib/curriculum/atp-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/curriculum/atp-generator.ts) | **Verified (8/8 tests)** | Menghasilkan alur pembelajaran sinkron kelas rangkap (Kelompok A: Kls 1-2, B: Kls 3-4, C: Kls 5-6), alur per fase, dan alur kelas mandiri. Mematuhi invarian pedagogis: TP kelas bawah dan atas TIDAK pernah digabungkan secara paksa hanya karena satu fase. |
+| **Program Tahunan (Prota) & Program Semester (Promes)** | `src/lib/curriculum/atp-generator.ts`, [src/components/curriculum/AtpPlanDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/AtpPlanDetailView.tsx) | **Verified** | Matriks resmi 18 pekan efektif per semester (Juli-Desember & Januari-Juni), deteksi pekan asesmen (STS di Mg-9, SAS di Mg-18), dan pembagian alokasi JP mingguan. |
+| **Peta Cakupan TP (Coverage Map)** | [src/components/curriculum/AtpGeneratorWizard.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/AtpGeneratorWizard.tsx), [src/components/curriculum/AtpPlanDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/AtpPlanDetailView.tsx) | **Verified** | Audit visual butir TP terjadwal vs belum terjadwal (*unscheduled*) di fase terkait, tombol penambahan cepat ke alur, serta peringatan tegas jika ada TP draf belum diverifikasi. |
+| **Audit Alokasi Waktu (Time Budget Audit)** | [src/lib/curriculum/atp-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/curriculum/atp-generator.ts) | **Verified** | Komparasi total JP terpasang terhadap standar struktur Kurikulum Merdeka SD (B. Indonesia: 216 JP, Matematika: 144 JP, IPAS: 180 JP, dll.), status sesuai, kurang, atau berlebih. |
+| **Server Actions ATP Generator & Versi** | [src/app/actions/atp-generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/atp-generator.ts) | **Verified** | `previewAtpGenerationAction`, `saveGeneratedAtpPlanAction`, `updateAtpPlanItemsAction`, dan `getAtpPlanFullDetailsAction` dengan audit logs & pencatatan versi bertahap. |
+| **Layar Wizard Generator ATP Cerdas** | [src/app/dashboard/kurikulum/atp/generator/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/atp/generator/page.tsx), [src/components/curriculum/AtpGeneratorWizard.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/AtpGeneratorWizard.tsx) | **Verified** | Wizard interaktif pemilihan kelompok, mapel, semester, alokasi jam, tinjauan 6 tab, penggeseran butir alur, dan penyimpanan draf. |
+| **Layar Workspace Detail, Prota/Promes & Cetak** | [src/app/dashboard/kurikulum/atp/[id]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/atp/%5Bid%5D/page.tsx), [src/components/curriculum/AtpPlanDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/AtpPlanDetailView.tsx) | **Verified** | Antarmuka responsif HP & laptop dengan 7 tab (Alur Multigrade Master, Kls Bawah, Kls Atas, Prota, Promes 18 pekan, Cakupan TP, dan Format Cetak Resmi ber-kop SDN Sedaeng II Tosari). |
+| **Layar Indeks Alur Tujuan Pembelajaran** | [src/app/dashboard/kurikulum/atp/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/atp/page.tsx) | **Verified** | Hero banner bergradien dengan tombol aksi generator, filter tab per kelompok (Semua, Kelompok A, B, C, Kelas Mandiri), dan kartu status komprehensif. |
+
+---
+
+### F. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
 1. **Modul Ajar Multigrade Lengkap:**
-   - Generator RPP/Modul Ajar berdiferensiasi siap unduh PDF berdasarkan hasil irisan materi yang disetujui.
+   - Generator RPP / Modul Ajar berdiferensiasi siap unduh PDF berdasarkan hasil irisan materi dan ATP yang telah disetujui.
 2. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
    - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
 3. **Instrumen Asesmen Formatif & Portofolio Siswa:**
-   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II.
+   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II Tosari.
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **42 tests PASSED** dari 7 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **50 tests PASSED** dari 8 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -96,5 +111,6 @@ pie title Status Fitur Proyek
   - `tests/curriculum-bank.test.ts` (7 passed)
   - `tests/curriculum-validation.test.ts` (7 passed)
   - `tests/material-intersection.test.ts` (13 passed)
+  - `tests/atp-generator.test.ts` (8 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (24 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (25 rute App Router terkompilasi, First Load JS bersama 103 kB).
