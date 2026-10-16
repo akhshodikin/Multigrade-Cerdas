@@ -202,6 +202,25 @@ export default async function KurikulumHubPage() {
         </a>
 
         <a
+          href="/dashboard/kurikulum/validasi"
+          className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-400 hover:shadow-md transition group block"
+        >
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-105 transition">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <h2 className="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition">
+            6. Pusat Validasi Kurikulum
+          </h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Audit mesin penjaminan mutu otomatis: relasi CP-TP-ATP, alur prasyarat, alokasi jam, dan laporan kelayakan teknis.
+          </p>
+          <div className="mt-4 flex items-center text-xs font-bold text-emerald-600 gap-1">
+            <span>Buka Pusat Validasi</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </a>
+
+        <a
           href="/dashboard/kurikulum/ekspor"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-rose-400 hover:shadow-md transition group block"
         >
@@ -209,7 +228,7 @@ export default async function KurikulumHubPage() {
             <Download className="w-5 h-5" />
           </div>
           <h2 className="text-base font-bold text-slate-900 group-hover:text-rose-600 transition">
-            6. Ekspor Data Kurikulum
+            7. Ekspor Data Kurikulum
           </h2>
           <p className="text-xs text-slate-500 mt-1">
             Unduh data kurikulum sah dalam format JSON terstruktur untuk backup atau integrasi modul lain.

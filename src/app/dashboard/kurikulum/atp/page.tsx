@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -81,6 +82,13 @@ export default async function AlurTujuanPembelajaranPage() {
                       <span className="text-slate-400 block text-[10px] uppercase font-bold">Status</span>
                       <span className="font-bold text-emerald-700 capitalize">{atp.status}</span>
                     </div>
+                    <div className="h-6 w-px bg-slate-200" />
+                    <Link
+                      href={`/dashboard/kurikulum/atp/${atp.id}`}
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition"
+                    >
+                      Buka Workspace &rarr;
+                    </Link>
                   </div>
                 </div>
 

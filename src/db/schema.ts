@@ -154,7 +154,7 @@ export const capaianPembelajaran = pgTable("capaian_pembelajaran", {
   aiInterpretation: text("ai_interpretation"), // Interpretasi / catatan pemetaan AI (terpisah dari sumber)
   duplicateHash: text("duplicate_hash").notNull(), // Deteksi data duplikat (SHA-256)
   version: integer("version").default(1).notNull(),
-  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected", "in_use"] }).default("draft").notNull(),
   reviewNotes: text("review_notes"),
   createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
   approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
@@ -176,7 +176,7 @@ export const tujuanPembelajaran = pgTable("tujuan_pembelajaran", {
   description: text("description").notNull(), // Rumusan lengkap Tujuan Pembelajaran
   sourceType: text("source_type", { enum: ["verbatim_source", "derived_teacher", "ai_assisted"] }).default("derived_teacher").notNull(),
   version: integer("version").default(1).notNull(),
-  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected", "in_use"] }).default("draft").notNull(),
   createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
   approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
   approvedAt: timestamp("approved_at", { withTimezone: true }),
@@ -192,7 +192,9 @@ export const atpPlans = pgTable("atp_plans", {
   phase: text("phase", { enum: ["Fase A", "Fase B", "Fase C"] }).notNull(),
   academicYear: text("academic_year").default("2024/2025").notNull(),
   totalHours: integer("total_hours").default(72).notNull(),
-  status: text("status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  status: text("status", { enum: ["draft", "in_review", "approved", "rejected", "in_use"] }).default("draft").notNull(),
+  rejectionNotes: text("rejection_notes"),
+  inUseAt: timestamp("in_use_at", { withTimezone: true }),
   version: integer("version").default(1).notNull(),
   authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
   approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
@@ -234,6 +236,41 @@ export const curriculumVersions = pgTable("curriculum_versions", {
   previousSnapshot: jsonb("previous_snapshot").$type<Record<string, unknown>>(),
   currentSnapshot: jsonb("current_snapshot").$type<Record<string, unknown>>(),
   changeReason: text("change_reason"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 17. Laporan Validasi Kurikulum (Validation Engine Reports)
+export const validationReports = pgTable("validation_reports", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  targetType: text("target_type", { enum: ["atp_plan", "curriculum_bank", "tp"] }).notNull(),
+  targetId: text("target_id").notNull(),
+  title: text("title").notNull(),
+  summary: text("summary").notNull(),
+  totalIssues: integer("total_issues").default(0).notNull(),
+  criticalCount: integer("critical_count").default(0).notNull(),
+  warningCount: integer("warning_count").default(0).notNull(),
+  infoCount: integer("info_count").default(0).notNull(),
+  pedagogicalDisclaimer: text("pedagogical_disclaimer").notNull(),
+  reviewedById: uuid("reviewed_by_id").references(() => users.id, { onDelete: "set null" }),
+  reviewedByName: text("reviewed_by_name"),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 18. Rincian Masalah Validasi (Validation Issues)
+export const validationIssues = pgTable("validation_issues", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reportId: uuid("report_id").references(() => validationReports.id, { onDelete: "cascade" }),
+  ruleCode: text("rule_code").notNull(), // e.g. "RULE_TP_ORPHAN", "RULE_PREREQ_VIOLATION"
+  title: text("title").notNull(),
+  severity: text("severity", { enum: ["kritis", "peringatan", "info"] }).notNull(),
+  sourceLocation: text("source_location").notNull(), // e.g. "TP-MAT-B.1-02", "ATP Urutan 2"
+  entityType: text("entity_type", { enum: ["cp", "tp", "atp_plan", "atp_item", "prerequisite"] }).notNull(),
+  entityId: text("entity_id").notNull(),
+  description: text("description").notNull(),
+  recommendation: text("recommendation").notNull(),
+  resolutionStatus: text("resolution_status", { enum: ["terbuka", "selesai", "diabaikan"] }).default("terbuka").notNull(),
+  resolutionNotes: text("resolution_notes"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -210,6 +211,13 @@ export default async function TujuanPembelajaranPage({
                       </button>
                     </form>
                   )}
+
+                  <Link
+                    href={`/dashboard/kurikulum/tp/${tp.id}`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 transition inline-flex items-center gap-1"
+                  >
+                    Buka Editor TP &amp; Prasyarat &rarr;
+                  </Link>
                 </div>
               </div>
             );

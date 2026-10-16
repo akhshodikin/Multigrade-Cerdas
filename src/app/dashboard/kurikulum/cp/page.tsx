@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -244,6 +245,13 @@ export default async function CapaianPembelajaranPage({
                         </button>
                       </form>
                     )}
+
+                    <Link
+                      href={`/dashboard/kurikulum/cp/${cp.id}`}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition inline-flex items-center gap-1"
+                    >
+                      Detail &amp; Dekonstruksi TP &rarr;
+                    </Link>
                   </div>
                 </div>
               </div>
