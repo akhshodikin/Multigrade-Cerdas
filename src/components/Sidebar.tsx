@@ -19,6 +19,7 @@ import {
   FileText,
   Image,
   CheckSquare,
+  WifiOff,
   X,
 } from "lucide-react";
 import { CurrentUser } from "@/lib/auth/session";
@@ -86,6 +87,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
     {
       title: "Sistem & Keamanan",
       items: [
+        { name: "Mode Offline & Sinkronisasi", href: "/dashboard/offline-sync", icon: WifiOff },
         { name: "Log Audit Aktivitas", href: "/dashboard/audit", icon: ClipboardList },
       ],
     },

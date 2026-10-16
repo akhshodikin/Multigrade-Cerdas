@@ -156,16 +156,22 @@ pie title Status Fitur Proyek
 
 ---
 
-### J. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
-1. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
-   - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
-2. **Sinkronisasi Dapodik & Integrasi e-Rapor Nasional Kemendikbudristek:**
-   - Pertukaran data kurikulum dan capaian pembelajaran semesteran secara terstandar nasional.
+### J. Mode Offline-First & Sinkronisasi PWA (Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **PWA Manifest & Service Worker Cache** | [public/manifest.json](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/public/manifest.json), [public/sw.js](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/public/sw.js), [src/components/offline/ServiceWorkerRegister.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/offline/ServiceWorkerRegister.tsx) | **Verified** | Manifest PWA SDN Kandangan I Tosari, caching dashboard shell, stale-while-revalidate untuk aset statis, dan isolasi keamanan (tidak pernah mencache password, session cookie, atau endpoint AI). |
+| **Penyimpanan Lokal IndexedDB Engine** | [src/lib/offline/indexed-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/indexed-db.ts), [src/lib/offline/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/types.ts) | **Verified (Unit Pass)** | Database `multigrade_offline_db` (v1) dengan 5 store: `outbox_queue`, `cached_materials`, `cached_students`, `sync_history`, `local_meta`. |
+| **Invarian Privasi Siswa (Zero PII)** | [src/lib/offline/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/types.ts), [src/lib/offline/indexed-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/indexed-db.ts) | **Verified** | Ketentuan 3: Hanya menyimpan kode anonim (`SDN1-A-1-01`), nama panggilan/tampilan, kelas, dan kelompok. NIK, kontak, nama orang tua, dan catatan sensitif sama sekali tidak disimpan di peranti. |
+| **Mesin Sinkronisasi Batch Server** | [src/lib/offline/sync-processor.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/sync-processor.ts), [src/app/actions/offline-sync.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/offline-sync.ts), [src/app/api/sync/batch/route.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/api/sync/batch/route.ts) | **Verified** | Validasi ulang server, verifikasi otorisasi kelompok guru, mutasi jurnal mengajar, asesmen siswa, modul ajar, dan pencatatan audit log `OFFLINE_BATCH_SYNC`. |
+| **Deteksi & Resolusi Konflik Versi** | [src/lib/offline/sync-processor.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/sync-processor.ts) | **Verified** | Optimistic concurrency control: Jika `serverVersion > clientBaseVersion`, server menandai `conflict`, mengembalikan field yang bertentangan dan snapshot server, tanpa menimpa data server sepihak. Antarmuka menyediakan opsi Fork sebagai draf baru atau adopsi server. |
+| **Proteksi Perangkat Bersama & Sesi** | [src/lib/offline/sync-processor.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/sync-processor.ts), [src/lib/offline/indexed-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/indexed-db.ts) | **Verified** | Isolasi outbox berdasarkan `userId`. Sinkronisasi ditolak jika pengguna aktif bukan pemilik antrean. Tombol `clearUserCache` untuk membersihkan cache lokal akun saat logout. |
+| **Cadangan & Pemulihan Darurat (JSON Dump)** | [src/lib/offline/indexed-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/offline/indexed-db.ts) (`exportEmergencyBackup`/`importEmergencyBackup`) | **Verified** | Ekspor seluruh antrean lokal dan materi terunduh ke berkas JSON untuk disimpan di flashdisk jika perangkat rusak atau blank spot berkepanjangan di lereng Bromo. Pemulihan instan melalui impor JSON. |
+| **Status Banner & Layar Pusat Sinkronisasi** | [src/components/offline/OfflineStatusBanner.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/offline/OfflineStatusBanner.tsx), [src/components/offline/OfflineSyncManagerView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/offline/OfflineSyncManagerView.tsx), [src/app/dashboard/offline-sync/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/offline-sync/page.tsx) | **Verified** | Banner status real-time (Online/Luring/Konflik) di seluruh halaman dashboard, indikator jumlah antrean, pemicu sinkronisasi instan, simulasi draf jurnal offline, penampil materi offline, dan disclaimer AI online. |
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **89 tests PASSED** dari 12 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **99 tests PASSED** dari 13 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -178,5 +184,7 @@ pie title Status Fitur Proyek
   - `tests/lkpd-media.test.ts` (12 passed)
   - `tests/assessment-progress.test.ts` (8 passed)
   - `tests/reports-export.test.ts` (7 passed)
+  - `tests/offline-sync.test.ts` (10 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (40 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Routes:** Seluruh rute App Router terintegrasi dengan penanganan dynamic rendering yang tepat.
+

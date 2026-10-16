@@ -5,6 +5,8 @@ import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import { CurrentUser } from "@/lib/auth/session";
 
+import { OfflineStatusBanner } from "./offline/OfflineStatusBanner";
+
 interface DashboardLayoutClientProps {
   user: CurrentUser;
   schoolName: string;
@@ -34,7 +36,10 @@ export function DashboardLayoutClient({
           onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
         />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-6">{children}</div>
+          <div className="max-w-7xl mx-auto space-y-6">
+            <OfflineStatusBanner user={user} />
+            {children}
+          </div>
         </main>
       </div>
     </div>

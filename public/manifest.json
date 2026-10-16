@@ -1,0 +1,25 @@
+{
+  "name": "Multigrade Cerdas AI - SDN Kandangan I Tosari",
+  "short_name": "Multigrade AI",
+  "description": "Platform Manajemen dan Perencanaan Pembelajaran Kelas Rangkap Offline-First SDN Kandangan I Tosari",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
