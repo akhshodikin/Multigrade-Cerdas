@@ -211,3 +211,5 @@ export function StudentExcelActions({
     </>
   );
 }
+
+export default StudentExcelActions;

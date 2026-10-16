@@ -300,3 +300,5 @@ export function EditStudentModal({ student }: EditStudentModalProps) {
     </>
   );
 }
+
+export default EditStudentModal;

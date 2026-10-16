@@ -8,6 +8,8 @@ import { GraduationCap, UserPlus, CheckCircle2, XCircle, Filter } from "lucide-r
 import { StudentExcelActions } from "@/components/students/StudentExcelActions";
 import { EditStudentModal } from "@/components/students/EditStudentModal";
 
+export const dynamic = "force-dynamic";
+
 export default async function SiswaPage({
   searchParams,
 }: {

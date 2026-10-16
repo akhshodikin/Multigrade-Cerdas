@@ -200,3 +200,5 @@ export function UserExcelActions({ isAdmin }: UserExcelActionsProps) {
     </>
   );
 }
+
+export default UserExcelActions;

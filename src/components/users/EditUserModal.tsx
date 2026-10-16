@@ -268,3 +268,5 @@ export function EditUserModal({ user, isAdmin }: EditUserModalProps) {
     </>
   );
 }
+
+export default EditUserModal;

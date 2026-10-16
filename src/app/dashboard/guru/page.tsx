@@ -7,6 +7,8 @@ import { Users, UserPlus, Shield, CheckCircle2, XCircle } from "lucide-react";
 import { UserExcelActions } from "@/components/users/UserExcelActions";
 import { EditUserModal } from "@/components/users/EditUserModal";
 
+export const dynamic = "force-dynamic";
+
 export default async function GuruPage() {
   const currentUser = await getCurrentUser();
   const isAdmin = currentUser?.role === "admin";
