@@ -43,7 +43,7 @@ export default async function LoginPage({
             </div>
           )}
 
-          <form action={loginAction} className="space-y-4">
+          <form action={loginAction} className="space-y-4" suppressHydrationWarning>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
                 Alamat Email
@@ -58,6 +58,7 @@ export default async function LoginPage({
                   placeholder="nama@sedaeng2.sch.id"
                   defaultValue="admin@sedaeng2.sch.id"
                   className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition"
+                  suppressHydrationWarning
                 />
               </div>
             </div>
@@ -76,6 +77,7 @@ export default async function LoginPage({
                   placeholder="••••••••"
                   defaultValue="Sedaeng2#Tosari"
                   className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition"
+                  suppressHydrationWarning
                 />
               </div>
             </div>

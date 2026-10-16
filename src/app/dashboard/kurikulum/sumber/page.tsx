@@ -106,6 +106,7 @@ export default async function DokumenSumberPage() {
             await importCurriculumSourceAction(formData);
           }}
           className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          suppressHydrationWarning
         >
           <div className="sm:col-span-2">
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
@@ -117,6 +118,7 @@ export default async function DokumenSumberPage() {
               required
               placeholder="Contoh: Keputusan Kepala BSKAP No. 032/H/KR/2024 tentang Capaian Pembelajaran"
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              suppressHydrationWarning
             />
           </div>
 
@@ -130,6 +132,7 @@ export default async function DokumenSumberPage() {
               required
               placeholder="032/H/KR/2024"
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              suppressHydrationWarning
             />
           </div>
 
@@ -143,6 +146,7 @@ export default async function DokumenSumberPage() {
               required
               defaultValue="BSKAP Kemendikbudristek"
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              suppressHydrationWarning
             />
           </div>
 
@@ -156,6 +160,7 @@ export default async function DokumenSumberPage() {
               required
               defaultValue={2024}
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              suppressHydrationWarning
             />
           </div>
 
@@ -167,6 +172,7 @@ export default async function DokumenSumberPage() {
               name="fileType"
               required
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              suppressHydrationWarning
             >
               <option value="pdf">PDF (.pdf)</option>
               <option value="docx">Word (.docx)</option>
@@ -184,6 +190,7 @@ export default async function DokumenSumberPage() {
               name="file"
               accept=".pdf,.docx,.xlsx"
               className="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              suppressHydrationWarning
             />
           </div>
 
@@ -196,6 +203,7 @@ export default async function DokumenSumberPage() {
               rows={3}
               placeholder="Salin teks dokumen atau catatan kutipan resmi jika tidak mengunggah berkas..."
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none font-mono text-xs"
+              suppressHydrationWarning
             />
           </div>
 

@@ -43,6 +43,7 @@ export default async function ProfilSekolahPage() {
             await updateSchoolProfileAction(formData);
           }}
           className="space-y-6"
+          suppressHydrationWarning
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -56,6 +57,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.name || "SDN SEDAENG II Tosari"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -71,6 +73,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.npsn || "20519000"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -85,6 +88,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.address || "Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -99,6 +103,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.headmasterName || "Bambang Sutrisno, S.Pd., M.Pd."}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -112,6 +117,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.headmasterNip || "197508122000031002"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -125,6 +131,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.phone || "081234567890"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 
@@ -138,6 +145,7 @@ export default async function ProfilSekolahPage() {
                 disabled={!isAuthorized}
                 defaultValue={school?.email || "sdnsedaeng2tosari@gmail.com"}
                 className="w-full px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500"
+                suppressHydrationWarning
               />
             </div>
 

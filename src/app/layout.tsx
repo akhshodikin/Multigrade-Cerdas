@@ -26,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
-      <body className="antialiased min-h-screen bg-slate-50 text-slate-900">
+    <html lang="id" suppressHydrationWarning>
+      <body className="antialiased min-h-screen bg-slate-50 text-slate-900" suppressHydrationWarning>
         <ServiceWorkerRegister />
         {children}
       </body>
