@@ -35,3 +35,7 @@ next-env.d.ts
 
 # Drizzle migrations / drizzle studio meta if local
 drizzle/meta
+
+# local persistent database files
+/data/
+

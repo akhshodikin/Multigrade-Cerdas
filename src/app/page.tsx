@@ -1,13 +1,17 @@
 import React from "react";
+import { getCurrentUser } from "@/lib/auth/session";
+import { LogIn, LayoutDashboard, ArrowRight, ShieldCheck } from "lucide-react";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser();
+
   return (
     <main className="min-h-screen p-6 md:p-12 max-w-6xl mx-auto">
       <header className="mb-10 border-b border-slate-200 pb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold mb-2 tracking-wide uppercase">
-              Fase Fondasi &amp; Arsitektur
+              Fondasi Aplikasi &amp; Pengelolaan Data Sekolah (Tahap 1)
             </span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
               Multigrade Cerdas AI
@@ -16,9 +20,27 @@ export default function HomePage() {
               SDN SEDAENG II Tosari &bull; Manajemen Pembelajaran Kelas Rangkap Berbasis Kurikulum Merdeka
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-amber-500 animate-pulse"></span>
-            <span className="text-sm font-medium text-slate-700">Tahap Inisialisasi &amp; Verifikasi</span>
+
+          <div className="flex items-center gap-3">
+            {user ? (
+              <a
+                href="/dashboard"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Buka Dashboard ({user.name})</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Masuk ke Sistem</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            )}
           </div>
         </div>
       </header>
@@ -33,8 +55,8 @@ export default function HomePage() {
             Fokus: Literasi &amp; Numerasi dasar, modul visual, instruksi suara/audio, diferensiasi konten pemula.
           </p>
           <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 flex justify-between">
-            <span>Status Modul:</span>
-            <span className="font-semibold text-amber-600">Perencanaan Arsitektur</span>
+            <span>Status Pengelolaan:</span>
+            <span className="font-semibold text-emerald-600">Siap Dikelola</span>
           </div>
         </div>
 
@@ -47,8 +69,8 @@ export default function HomePage() {
             Fokus: Penguatan konsep kontekstual, IPAS awal, latihan bertingkat mandiri &amp; kolaboratif sebaya.
           </p>
           <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 flex justify-between">
-            <span>Status Modul:</span>
-            <span className="font-semibold text-amber-600">Perencanaan Arsitektur</span>
+            <span>Status Pengelolaan:</span>
+            <span className="font-semibold text-emerald-600">Siap Dikelola</span>
           </div>
         </div>
 
@@ -61,8 +83,8 @@ export default function HomePage() {
             Fokus: Literasi kritis, pemecahan masalah numerasi kompleks, kepemimpinan tutor sebaya multigrade.
           </p>
           <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 flex justify-between">
-            <span>Status Modul:</span>
-            <span className="font-semibold text-amber-600">Perencanaan Arsitektur</span>
+            <span>Status Pengelolaan:</span>
+            <span className="font-semibold text-emerald-600">Siap Dikelola</span>
           </div>
         </div>
       </section>
@@ -74,19 +96,19 @@ export default function HomePage() {
         <ul className="space-y-2 text-sm text-slate-700">
           <li className="flex items-start gap-2">
             <span className="text-blue-600 font-bold">&check;</span>
-            <span><strong>Offline-Resilient Architecture:</strong> Kemampuan sinkronisasi lokal saat internet di Tosari sedang terputus.</span>
+            <span><strong>Basis Data PostgreSQL &amp; Drizzle ORM:</strong> Data tersimpan persisten di server dengan relasi kelas asal &amp; kelompok multigrade yang konsisten.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-blue-600 font-bold">&check;</span>
-            <span><strong>Dual-Class Multigrade Management:</strong> 1 guru mengelola 2 tingkatan kelas sekaligus dalam 1 sesi pembelajaran terpadu.</span>
+            <span><strong>Autentikasi &amp; RBAC Server-Side:</strong> Akses guru, kepala sekolah, dan administrator divalidasi ketat pada lapisan server.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-blue-600 font-bold">&check;</span>
-            <span><strong>Privasi &amp; Keamanan Data (Zero Student PII Leaks):</strong> Tidak mengekspos identitas pribadi siswa ke publik maupun model AI generatif mentah.</span>
+            <span><strong>Audit Trail Mutasi Data:</strong> Setiap pembaruan profil, pendaftaran siswa, dan perubahan semester tercatat dalam log audit.</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-blue-600 font-bold">&check;</span>
-            <span><strong>Google AI Studio Integration:</strong> Asisten diferensiasi materi dan generator asesmen multigrade adaptif.</span>
+            <span><strong>Responsif HP Android &amp; Laptop:</strong> Antarmuka dapat dioperasikan nyaman melalui smartphone guru maupun laptop kelas.</span>
           </li>
         </ul>
       </section>

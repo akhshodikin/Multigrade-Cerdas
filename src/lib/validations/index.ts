@@ -1,57 +1,59 @@
 import { z } from "zod";
 
-// Validasi Kelompok Multigrade SDN SEDAENG II
-export const multigradeGroupEnum = z.enum(["group-a", "group-b", "group-c"]);
-export const gradeEnum = z.number().int().min(1).max(6);
-export const phaseEnum = z.enum(["Fase A", "Fase B", "Fase C"]);
+// Peran Pengguna
+export const userRoleEnum = z.enum(["admin", "headmaster", "teacher"]);
+export type UserRole = z.infer<typeof userRoleEnum>;
 
-// Schema Siswa (Privacy-first: No real PII required in system)
-export const studentSchema = z.object({
-  studentCode: z.string().min(3).max(30),
-  displayName: z.string().min(2).max(50),
-  classId: gradeEnum,
-  groupId: multigradeGroupEnum,
-  gender: z.enum(["L", "P"]),
+// Login Schema
+export const loginSchema = z.object({
+  email: z.string().email("Format email tidak valid"),
+  password: z.string().min(6, "Kata sandi minimal 6 karakter"),
+});
+
+// Profil Sekolah Schema
+export const schoolProfileSchema = z.object({
+  name: z.string().min(3, "Nama sekolah minimal 3 karakter"),
+  npsn: z.string().min(8, "NPSN harus 8 karakter").max(8, "NPSN harus 8 karakter"),
+  address: z.string().min(5, "Alamat minimal 5 karakter"),
+  headmasterName: z.string().min(3, "Nama Kepala Sekolah minimal 3 karakter"),
+  headmasterNip: z.string().optional().or(z.literal("")),
+  phone: z.string().optional().or(z.literal("")),
+  email: z.string().email("Format email sekolah tidak valid").optional().or(z.literal("")),
+  activeAcademicYear: z.string().min(4, "Tahun ajaran tidak valid (contoh: 2024/2025)"),
+  activeSemester: z.enum(["Ganjil", "Genap"]),
+});
+
+// Tahun Ajaran Schema
+export const academicTermSchema = z.object({
+  year: z.string().min(4, "Tahun ajaran tidak valid"),
+  semester: z.enum(["Ganjil", "Genap"]),
+  isActive: z.boolean().default(false),
+  startDate: z.string().optional().or(z.literal("")),
+  endDate: z.string().optional().or(z.literal("")),
+});
+
+// Pengguna / Guru Schema
+export const userSchema = z.object({
+  name: z.string().min(3, "Nama minimal 3 karakter"),
+  email: z.string().email("Format email tidak valid"),
+  password: z.string().min(6, "Kata sandi minimal 6 karakter").optional().or(z.literal("")),
+  role: userRoleEnum,
+  nip: z.string().optional().or(z.literal("")),
+  phone: z.string().optional().or(z.literal("")),
+  assignedGroupId: z.enum(["group-a", "group-b", "group-c"]).nullable().optional(),
   isActive: z.boolean().default(true),
 });
 
-// Schema Rencana Pelaksanaan Pembelajaran Multigrade (RPP Terpadu)
-export const multigradeLessonPlanSchema = z.object({
-  title: z.string().min(5).max(150),
-  groupId: multigradeGroupEnum,
-  subjectId: z.string().min(2),
-  topic: z.string().min(3).max(100),
-  durationMinutes: z.number().int().min(30).max(180).default(70),
-  differentiatedStrategy: z.object({
-    commonConcept: z.string().min(5),
-    lowerGradeActivity: z.object({
-      grade: z.number().int().min(1).max(5),
-      mode: z.enum(["direct_instruction", "independent_task", "peer_tutoring", "hands_on"]),
-      steps: z.array(z.string()).min(1),
-    }),
-    upperGradeActivity: z.object({
-      grade: z.number().int().min(2).max(6),
-      mode: z.enum(["direct_instruction", "independent_task", "peer_tutoring", "hands_on"]),
-      steps: z.array(z.string()).min(1),
-    }),
-    peerTutoringNotes: z.string().optional(),
-  }),
-});
-
-// Schema Hasil Asesmen Formatif / Sumatif
-export const assessmentResultSchema = z.object({
-  assessmentId: z.string().uuid(),
-  studentId: z.string().uuid(),
-  score: z.number().int().min(0).max(100).optional(),
-  masteryLevel: z.enum(["perlu_bimbingan", "cukup", "baik", "sangat_baik"]),
-  teacherNotes: z.string().max(500).optional(),
-});
-
-// Schema Antrean Sinkronisasi Offline
-export const offlineSyncPayloadSchema = z.object({
-  clientEntityId: z.string(),
-  entityType: z.enum(["assessment_result", "lesson_plan", "attendance"]),
-  action: z.enum(["insert", "update", "delete"]),
-  payload: z.record(z.any()),
-  queuedAt: z.string().datetime(),
+// Siswa Schema (Data sintetis untuk SDN SEDAENG II Tosari)
+export const studentSchema = z.object({
+  studentCode: z.string().min(3, "Kode siswa minimal 3 karakter").max(30),
+  displayName: z.string().min(2, "Nama panggilan minimal 2 karakter").max(50),
+  fullName: z.string().min(3, "Nama lengkap minimal 3 karakter").max(100),
+  classId: z.coerce.number().int().min(1).max(6),
+  groupId: z.enum(["group-a", "group-b", "group-c"]),
+  gender: z.enum(["L", "P"]),
+  birthDate: z.string().optional().or(z.literal("")),
+  guardianName: z.string().optional().or(z.literal("")),
+  isActive: z.boolean().default(true),
+  notes: z.string().optional().or(z.literal("")),
 });
