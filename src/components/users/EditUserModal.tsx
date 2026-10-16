@@ -41,6 +41,7 @@ export function EditUserModal({ user, isAdmin }: EditUserModalProps) {
         setTimeout(() => {
           setIsOpen(false);
           setResult(null);
+          window.location.reload();
         }, 1200);
       } else {
         setResult({

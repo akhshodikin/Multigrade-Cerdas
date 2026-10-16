@@ -48,8 +48,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // ATURAN KEAMANAN (Ketentuan 2): Dilarang mencache otentikasi, login, atau rahasia API
+  // ATURAN KEAMANAN & PENGEMBANGAN: Dilarang mencache otentikasi, login, rahasia API, atau localhost development
   if (
+    url.hostname === "localhost" ||
+    url.hostname === "127.0.0.1" ||
+    url.pathname.includes("hot-update") ||
     url.pathname.startsWith("/api/auth") ||
     url.pathname.includes("/login") ||
     url.pathname.startsWith("/api/ai")

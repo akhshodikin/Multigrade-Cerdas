@@ -43,6 +43,7 @@ export function EditStudentModal({ student }: EditStudentModalProps) {
         setTimeout(() => {
           setIsOpen(false);
           setResult(null);
+          window.location.reload();
         }, 1200);
       } else {
         setResult({
