@@ -6,6 +6,8 @@ import * as schema from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { DashboardLayoutClient } from "@/components/DashboardLayoutClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardLayout({
   children,
 }: {

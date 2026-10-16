@@ -100,7 +100,7 @@ export const auditLogs = pgTable("audit_logs", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 9. Mata Pelajaran SD Kurikulum Merdeka (Persiapan Tahap Berikutnya)
+// 9. Mata Pelajaran SD Kurikulum Merdeka
 export const subjects = pgTable("subjects", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -108,7 +108,7 @@ export const subjects = pgTable("subjects", {
   targetPhases: text("target_phases").notNull(),
 });
 
-// 10. Tujuan Pembelajaran (TP Resmi)
+// Legacy / compatibility reference
 export const learningObjectives = pgTable("learning_objectives", {
   id: uuid("id").defaultRandom().primaryKey(),
   subjectId: text("subject_id").references(() => subjects.id).notNull(),
@@ -117,6 +117,123 @@ export const learningObjectives = pgTable("learning_objectives", {
   code: text("code").notNull(),
   description: text("description").notNull(),
   sourceDocument: text("source_document"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 10. Dokumen Sumber Kurikulum (PDF, DOCX, XLSX, Manual Input)
+export const curriculumSources = pgTable("curriculum_sources", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  documentNumber: text("document_number").notNull(),
+  issuingAuthority: text("issuing_authority").default("BSKAP Kemendikbudristek").notNull(),
+  publicationYear: integer("publication_year").default(2024).notNull(),
+  fileType: text("file_type", { enum: ["pdf", "docx", "xlsx", "manual"] }).notNull(),
+  fileName: text("file_name"),
+  fileSize: integer("file_size"),
+  extractedText: text("extracted_text"),
+  needsManualReview: boolean("needs_manual_review").default(false).notNull(),
+  status: text("status", { enum: ["draft", "verified", "rejected"] }).default("draft").notNull(),
+  version: text("version").default("v1.0").notNull(),
+  uploadedById: uuid("uploaded_by_id").references(() => users.id, { onDelete: "set null" }),
+  verifiedById: uuid("verified_by_id").references(() => users.id, { onDelete: "set null" }),
+  verifiedAt: timestamp("verified_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 11. Capaian Pembelajaran (CP) dan Elemen CP Resmi
+export const capaianPembelajaran = pgTable("capaian_pembelajaran", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  phase: text("phase", { enum: ["Fase A", "Fase B", "Fase C"] }).notNull(),
+  element: text("element").notNull(),
+  sourceDocumentId: uuid("source_document_id").references(() => curriculumSources.id, { onDelete: "cascade" }),
+  sourcePage: text("source_page"),
+  sourceSection: text("source_section"),
+  originalSourceText: text("original_source_text").notNull(), // Rumusan CP verbatim tanpa perubahan
+  aiInterpretation: text("ai_interpretation"), // Interpretasi / catatan pemetaan AI (terpisah dari sumber)
+  duplicateHash: text("duplicate_hash").notNull(), // Deteksi data duplikat (SHA-256)
+  version: integer("version").default(1).notNull(),
+  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  reviewNotes: text("review_notes"),
+  createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 12. Tujuan Pembelajaran (TP)
+export const tujuanPembelajaran = pgTable("tujuan_pembelajaran", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  cpId: uuid("cp_id").references(() => capaianPembelajaran.id, { onDelete: "cascade" }),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  phase: text("phase", { enum: ["Fase A", "Fase B", "Fase C"] }).notNull(),
+  targetGrade: integer("target_grade"), // Kelas 1 s/d 6
+  code: text("code").notNull(), // e.g. "TP-MAT-B.1-01"
+  competency: text("competency").notNull(),
+  contentScope: text("content_scope").notNull(),
+  description: text("description").notNull(), // Rumusan lengkap Tujuan Pembelajaran
+  sourceType: text("source_type", { enum: ["verbatim_source", "derived_teacher", "ai_assisted"] }).default("derived_teacher").notNull(),
+  version: integer("version").default(1).notNull(),
+  verificationStatus: text("verification_status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 13. Alur Tujuan Pembelajaran (ATP Plans)
+export const atpPlans = pgTable("atp_plans", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  phase: text("phase", { enum: ["Fase A", "Fase B", "Fase C"] }).notNull(),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  totalHours: integer("total_hours").default(72).notNull(),
+  status: text("status", { enum: ["draft", "in_review", "approved", "rejected"] }).default("draft").notNull(),
+  version: integer("version").default(1).notNull(),
+  authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 14. Butir Urutan Alur ATP (ATP Items)
+export const atpItems = pgTable("atp_items", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  atpPlanId: uuid("atp_plan_id").references(() => atpPlans.id, { onDelete: "cascade" }).notNull(),
+  tpId: uuid("tp_id").references(() => tujuanPembelajaran.id, { onDelete: "cascade" }).notNull(),
+  sequenceOrder: integer("sequence_order").notNull(),
+  allocatedHours: integer("allocated_hours").default(4).notNull(),
+  targetGrade: integer("target_grade").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).notNull(),
+  multigradeNotes: text("multigrade_notes"), // Catatan pembelajaran kelas rangkap
+});
+
+// 15. Prasyarat Pembelajaran (TP Prerequisites)
+export const tpPrerequisites = pgTable("tp_prerequisites", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  tpId: uuid("tp_id").references(() => tujuanPembelajaran.id, { onDelete: "cascade" }).notNull(),
+  prerequisiteTpId: uuid("prerequisite_tp_id").references(() => tujuanPembelajaran.id, { onDelete: "cascade" }).notNull(),
+  prerequisiteType: text("prerequisite_type", { enum: ["wajib", "dianjurkan"] }).default("wajib").notNull(),
+  notes: text("notes"),
+});
+
+// 16. Riwayat Versi & Perbandingan Kurikulum (Audit Trails of Entities)
+export const curriculumVersions = pgTable("curriculum_versions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  entityType: text("entity_type", { enum: ["source_doc", "cp", "tp", "atp"] }).notNull(),
+  entityId: text("entity_id").notNull(),
+  versionNumber: integer("version_number").notNull(),
+  changeType: text("change_type", { enum: ["created", "updated", "status_changed", "restored"] }).notNull(),
+  changedById: uuid("changed_by_id").references(() => users.id, { onDelete: "set null" }),
+  changedByName: text("changed_by_name"),
+  previousSnapshot: jsonb("previous_snapshot").$type<Record<string, unknown>>(),
+  currentSnapshot: jsonb("current_snapshot").$type<Record<string, unknown>>(),
+  changeReason: text("change_reason"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

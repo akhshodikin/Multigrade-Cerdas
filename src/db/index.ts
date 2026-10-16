@@ -22,9 +22,7 @@ let pgliteInstance = global.__pgliteClient;
 
 if (!pgliteInstance) {
   pgliteInstance = new PGlite(DATA_DIR);
-  if (process.env.NODE_ENV !== "production") {
-    global.__pgliteClient = pgliteInstance;
-  }
+  global.__pgliteClient = pgliteInstance;
 }
 
 export async function getPGliteClient(): Promise<PGlite> {

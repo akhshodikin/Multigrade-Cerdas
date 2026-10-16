@@ -2,6 +2,8 @@ import React from "react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { LogIn, LayoutDashboard, ArrowRight, ShieldCheck } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const user = await getCurrentUser();
 

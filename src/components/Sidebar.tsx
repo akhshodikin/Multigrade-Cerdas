@@ -47,6 +47,16 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       ],
     },
     {
+      title: "Bank Kurikulum",
+      items: [
+        { name: "Ringkasan Kurikulum", href: "/dashboard/kurikulum", icon: Layers },
+        { name: "Dokumen Sumber", href: "/dashboard/kurikulum/sumber", icon: School },
+        { name: "Capaian Pembelajaran (CP)", href: "/dashboard/kurikulum/cp", icon: GraduationCap },
+        { name: "Tujuan Pembelajaran (TP)", href: "/dashboard/kurikulum/tp", icon: LayoutDashboard },
+        { name: "Alur Tujuan (ATP)", href: "/dashboard/kurikulum/atp", icon: Calendar },
+      ],
+    },
+    {
       title: "Sistem & Keamanan",
       items: [
         { name: "Log Audit Aktivitas", href: "/dashboard/audit", icon: ClipboardList },
