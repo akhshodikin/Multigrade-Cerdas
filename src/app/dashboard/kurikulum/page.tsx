@@ -234,6 +234,48 @@ export default async function KurikulumHubPage() {
         </a>
 
         <a
+          href="/dashboard/kurikulum/lkpd"
+          className="bg-white p-6 rounded-2xl border-2 border-emerald-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition group block bg-gradient-to-br from-emerald-50/30 to-white"
+        >
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3 group-hover:scale-105 transition shadow-sm">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition">
+              7. LKPD Multigrade Berdiferensiasi
+            </h2>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Generator lembar kerja per kelas berpasangan, stimulus kebun Tosari, latihan interaktif, refleksi siswa, dan rubrik formatif 4 tingkat.
+          </p>
+          <div className="mt-4 flex items-center text-xs font-bold text-emerald-600 gap-1">
+            <span>Kelola LKPD</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </a>
+
+        <a
+          href="/dashboard/kurikulum/media-pembelajaran"
+          className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-400 hover:shadow-md transition group block"
+        >
+          <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-105 transition">
+            <Layers className="w-5 h-5" />
+          </div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-900 group-hover:text-teal-600 transition">
+              8. Perpustakaan Media Pembelajaran
+            </h2>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Kumpulan aset belajar reusable: kartu aktivitas/gambar, bahan bacaan bertingkat, media literasi & numerasi, slide presentasi, dan ilustrasi SVG.
+          </p>
+          <div className="mt-4 flex items-center text-xs font-bold text-teal-600 gap-1">
+            <span>Buka Perpustakaan Media</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </a>
+
+        <a
           href="/dashboard/kurikulum/versi"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-400 hover:shadow-md transition group block"
         >

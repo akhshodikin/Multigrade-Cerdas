@@ -9,12 +9,13 @@ Dokumen ini melacak status kemajuan pengembangan secara transparan, akurat, dan 
 
 ```mermaid
 pie title Status Fitur Proyek
-    "Fondasi & Manajemen Sekolah" : 16.6
-    "Bank Kurikulum Multigrade" : 16.6
-    "Mesin Validasi & Persetujuan ATP" : 16.6
-    "Pemetaan Irisan Materi AI" : 16.6
-    "Generator ATP Multigrade, Prota & Promes" : 16.6
-    "Generator Modul Ajar Multigrade AI" : 17.0
+    "Fondasi & Manajemen Sekolah" : 14.2
+    "Bank Kurikulum Multigrade" : 14.2
+    "Mesin Validasi & Persetujuan ATP" : 14.2
+    "Pemetaan Irisan Materi AI" : 14.2
+    "Generator ATP Multigrade, Prota & Promes" : 14.2
+    "Generator Modul Ajar Multigrade AI" : 14.2
+    "LKPD Berdiferensiasi & Media Pembelajaran" : 14.8
 ```
 
 ---
@@ -108,7 +109,23 @@ pie title Status Fitur Proyek
 
 ---
 
-### G. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+### G. LKPD Berdiferensiasi & Media Pembelajaran Multigrade (Tahap 7 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **Generator LKPD Berpasangan per Kelas** | [src/lib/lkpd-media/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/generator.ts) | **Verified (12/12 tests)** | Menghasilkan LKPD berpasangan untuk kelas bawah (e.g. Kelas 1) dan kelas atas (e.g. Kelas 2) dalam satu tema bersama. Keduanya terhubung langsung ke ID Tujuan Pembelajaran (TP) spesifik masing-masing. |
+| **Diferensiasi Tugas & Petunjuk Sesuai Usia** | [src/lib/lkpd-media/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/types.ts), `tests/lkpd-media.test.ts` | **Verified** | Kelas 1: Petunjuk lisan guru, mencocokkan visual, kotak menggambar/mewarnai. Kelas 2/4/6: Petunjuk membaca mandiri, isian singkat, dan analisis soal cerita. |
+| **Pustaka Ilustrasi SVG Ramah Offline & Fallback** | [src/lib/lkpd-media/svg-illustrations.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/svg-illustrations.ts) | **Verified** | Ilustrasi vektor mandiri (kebun sayur, kentang, kubis, wortel, keranjang panen, sekolah Sedaeng). Jika layanan eksternal gagal, sistem tetap merender SVG lokal dengan aman tanpa gambar rusak. |
+| **Versi Cetak Berwarna & Hitam Putih (B&W Eco-Print)** | [src/components/lkpd/LkpdDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/lkpd/LkpdDetailView.tsx) | **Verified** | Mode cetak ganda: Berwarna penuh untuk tayangan layar dan Hitam Putih Ramah Tinta (*line-art grayscale*) untuk printer sekolah daerah terpencil. |
+| **Bahan Bacaan Bertingkat (*Leveled Reading*)** | [src/lib/lkpd-media/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/generator.ts) | **Verified** | Teks bertingkat (Tingkat Dasar ~38 kata vs Mandiri ~96 kata) dengan daftar kosakata dan pertanyaan pemahaman konteks alam Tosari. |
+| **Media Literasi & Numerasi Kontekstual** | [src/lib/lkpd-media/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/generator.ts) | **Verified** | Skenario pasar sayur mini Tosari, visual counts konkret, dan 3 level tantangan hitung (mudah, sedang, pengayaan). |
+| **Presentasi Pembelajaran 5 Slide** | [src/lib/lkpd-media/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/generator.ts), [src/components/lkpd/MediaLibraryView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/lkpd/MediaLibraryView.tsx) | **Verified** | Slide deck interaktif yang memandu rotasi pengantar bersama, bimbingan mandiri, dan penutup kelas rangkap. |
+| **Rubrik 4 Tingkat & Refleksi Siswa** | [src/lib/lkpd-media/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/lkpd-media/types.ts) | **Verified** | Refleksi siswa dengan rating emotikon interaktif serta rubrik guru 4 tingkat (Perlu Bimbingan, Cukup, Baik, Sangat Baik). |
+| **Perpustakaan Media (*Reusable Library*)** | [src/app/dashboard/kurikulum/media-pembelajaran/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/media-pembelajaran/page.tsx), [src/components/lkpd/MediaLibraryView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/lkpd/MediaLibraryView.tsx) | **Verified** | Katalog media pembelajaran terpusat yang dapat difilter per fase/mapel/tipe dan digunakan ulang pada modul lain. |
+| **Format Cetak Resmi & Ekspor Dokumen** | [src/components/lkpd/LkpdDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/lkpd/LkpdDetailView.tsx) | **Verified** | Lembar kerja resmi ber-KOP SDN SEDAENG II Tosari, siap cetak (PDF) dan ekspor berkas dokumen teks/DOCX terstruktur. |
+
+---
+
+### H. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
 1. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
    - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
 2. **Instrumen Asesmen Formatif & Portofolio Siswa:**
@@ -117,7 +134,7 @@ pie title Status Fitur Proyek
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **62 tests PASSED** dari 9 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **74 tests PASSED** dari 10 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -127,5 +144,6 @@ pie title Status Fitur Proyek
   - `tests/material-intersection.test.ts` (13 passed)
   - `tests/atp-generator.test.ts` (8 passed)
   - `tests/modul-ajar.test.ts` (12 passed)
+  - `tests/lkpd-media.test.ts` (12 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (28 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (32 rute App Router terkompilasi, First Load JS bersama 103 kB).

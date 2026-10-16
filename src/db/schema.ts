@@ -469,3 +469,104 @@ export const academicCalendars = pgTable("academic_calendars", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
+
+// 22. Lembar Kerja Peserta Didik (LKPD Multigrade per Kelas)
+export const lkpdWorksheets = pgTable("lkpd_worksheets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  lessonPlanId: uuid("lesson_plan_id").references(() => multigradeLessonPlans.id, { onDelete: "set null" }),
+  title: text("title").notNull(),
+  groupId: text("group_id").references(() => multigradeGroups.id).notNull(),
+  classId: integer("class_id").references(() => classes.id).notNull(),
+  grade: integer("grade").notNull(), // 1, 2, 3, 4, 5, 6
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  phase: text("phase").notNull(), // "Fase A", "Fase B", "Fase C"
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  themeOrTopic: text("theme_or_topic").notNull(),
+  targetTpId: uuid("target_tp_id"),
+  targetTpCode: text("target_tp_code").notNull(),
+  targetTpDescription: text("target_tp_description").notNull(),
+  timeAllocationMinutes: integer("time_allocation_minutes").default(35).notNull(),
+  ageAppropriateInstructions: jsonb("age_appropriate_instructions").$type<string[]>().default([]).notNull(),
+  stimulus: jsonb("stimulus").$type<{
+    type: "story" | "dialogue" | "image" | "data_table" | "local_context";
+    title: string;
+    content: string;
+    illustrationKey?: string;
+    illustrationCaption?: string;
+  }>().notNull(),
+  activitySteps: jsonb("activity_steps").$type<Array<{
+    stepNumber: number;
+    instruction: string;
+    guidanceNotes?: string;
+  }>>().default([]).notNull(),
+  answerSections: jsonb("answer_sections").$type<Array<{
+    id: string;
+    questionNumber: number;
+    questionType: "multiple_choice" | "short_answer" | "essay" | "matching" | "drawing_area" | "fill_blank";
+    questionText: string;
+    options?: string[];
+    matchingPairs?: Array<{ left: string; right: string }>;
+    helperHint?: string;
+    points: number;
+  }>>().default([]).notNull(),
+  studentReflection: jsonb("student_reflection").$type<{
+    emoticonOptions: Array<{ mood: string; label: string; icon: string }>;
+    promptQuestions: string[];
+  }>().notNull(),
+  teacherRubric: jsonb("teacher_rubric").$type<Array<{
+    indicator: string;
+    perluBimbingan: string;
+    cukup: string;
+    baik: string;
+    sangatBaik: string;
+    maxScore: number;
+  }>>().default([]).notNull(),
+  printSettings: jsonb("print_settings").$type<{
+    colorMode: "color" | "grayscale" | "bw_eco";
+    showSchoolHeader: boolean;
+    paperSize: "A4" | "F4";
+  }>().default({ colorMode: "color", showSchoolHeader: true, paperSize: "A4" }).notNull(),
+  status: text("status", { enum: ["draft", "in_review", "approved", "published", "archived"] }).default("draft").notNull(),
+  version: integer("version").default(1).notNull(),
+  versionNotes: text("version_notes"),
+  clonedFromId: uuid("cloned_from_id"),
+  authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  rejectionNotes: text("rejection_notes"),
+  aiAssisted: boolean("ai_assisted").default(true).notNull(),
+  aiProvider: text("ai_provider").default("gemini").notNull(),
+  aiModel: text("ai_model").default("gemini-3.8-flash").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 23. Perpustakaan Media Pembelajaran (Reusable Multigrade Learning Media)
+export const learningMediaItems = pgTable("learning_media_items", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  lessonPlanId: uuid("lesson_plan_id").references(() => multigradeLessonPlans.id, { onDelete: "set null" }),
+  title: text("title").notNull(),
+  mediaType: text("media_type", {
+    enum: [
+      "kartu_aktivitas",
+      "kartu_gambar",
+      "bacaan_bertingkat",
+      "media_literasi_numerasi",
+      "presentasi",
+      "ilustrasi_pendukung"
+    ]
+  }).notNull(),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  phase: text("phase").default("Fase A").notNull(),
+  targetGrade: integer("target_grade"), // null = lintas kelas
+  groupId: text("group_id").references(() => multigradeGroups.id),
+  description: text("description").default("").notNull(),
+  tags: jsonb("tags").$type<string[]>().default([]).notNull(),
+  contentData: jsonb("content_data").$type<Record<string, unknown>>().default({}).notNull(),
+  colorModeSupported: text("color_mode_supported", { enum: ["both", "color_only", "bw_eco"] }).default("both").notNull(),
+  isPublicLibrary: boolean("is_public_library").default(true).notNull(),
+  authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
