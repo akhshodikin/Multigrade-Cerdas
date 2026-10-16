@@ -9,11 +9,12 @@ Dokumen ini melacak status kemajuan pengembangan secara transparan, akurat, dan 
 
 ```mermaid
 pie title Status Fitur Proyek
-    "Fondasi & Manajemen Sekolah (Selesai & Lolos Uji)" : 20
-    "Bank Kurikulum Multigrade (Selesai & Lolos Uji)" : 20
-    "Mesin Validasi & Persetujuan ATP (Selesai & Lolos Uji)" : 20
-    "Pemetaan Irisan Materi AI (Selesai & Lolos Uji)" : 20
-    "Generator ATP Multigrade, Prota & Promes (Selesai & Lolos Uji)" : 20
+    "Fondasi & Manajemen Sekolah" : 16.6
+    "Bank Kurikulum Multigrade" : 16.6
+    "Mesin Validasi & Persetujuan ATP" : 16.6
+    "Pemetaan Irisan Materi AI" : 16.6
+    "Generator ATP Multigrade, Prota & Promes" : 16.6
+    "Generator Modul Ajar Multigrade AI" : 17.0
 ```
 
 ---
@@ -92,18 +93,31 @@ pie title Status Fitur Proyek
 
 ---
 
-### F. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
-1. **Modul Ajar Multigrade Lengkap:**
-   - Generator RPP / Modul Ajar berdiferensiasi siap unduh PDF berdasarkan hasil irisan materi dan ATP yang telah disetujui.
-2. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
+### F. Generator Modul Ajar Multigrade Cerdas AI (Tahap 6 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **Pola Rotasi 8-Langkah (*Staggered Direct Instruction*)** | [src/lib/modul-ajar/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/modul-ajar/types.ts), [src/lib/modul-ajar/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/modul-ajar/generator.ts) | **Verified (12/12 tests)** | Menerapkan 8 langkah pembelajaran mutlak: Pembukaan bersama &rarr; Pengantar/demonstrasi bersama &rarr; Bimbingan langsung kelas pertama (kelas kedua tugas terarah) &rarr; Tugas mandiri kelas pertama &rarr; Bimbingan langsung kelas kedua &rarr; Aktivitas & produk kelas masing-masing &rarr; Berbagi hasil &rarr; Asesmen & refleksi bersama. Guru TIDAK PERNAH membimbing kedua tingkatan secara intensif pada saat yang bersamaan. |
+| **Aktivitas Mandiri Sesuai Usia & Konteks Tosari** | [src/lib/modul-ajar/generator.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/modul-ajar/generator.ts) | **Verified** | Desain aktivitas mandiri anak kelas rendah (Kelas 1) berbasis benda konkret, kartu bergambar, atau pasangan tutor sebaya. Mengintegrasikan kearifan lokal pertanian lereng Bromo Tosari (kentang, kubis, daun bawang). |
+| **Tujuan Pembelajaran Terpisah Antar-Kelas** | [src/lib/modul-ajar/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/modul-ajar/types.ts), `tests/modul-ajar.test.ts` | **Verified** | Kelas 1 dan Kelas 2 (atau 3-4, 5-6) masing-masing mempertahankan rumusan tujuan pembelajaran terpisah yang sesuai target kompetensi kelasnya, tidak pernah dipaksa seragam. |
+| **Asesmen Multidimensi & Rubrik 4 Tingkat** | [src/lib/modul-ajar/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/modul-ajar/types.ts), [src/components/curriculum/ModulAjarDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/ModulAjarDetailView.tsx) | **Verified** | Asesmen diagnostik (pertanyaan pemantik lisan), formatif (observasi bimbingan + rubrik 4 tingkat: Perlu Bimbingan, Cukup, Baik, Sangat Baik), dan sumatif (lembar kerja mandiri), disertai refleksi guru & siswa. |
+| **Audit Konsistensi & Ketertelusuran Kurikulum** | `src/lib/modul-ajar/generator.ts` (`checkModulCurriculumIntegrity`) | **Verified** | Pelacakan otomatis ke database: memastikan referensi CP, TP, dan ATP tetap valid, mendeteksi jika TP terkait telah dihapus atau masih berstatus draf, serta memberikan skor integritas. |
+| **Siklus Hidup Persetujuan & Duplikasi Modul** | [src/app/actions/modul-ajar.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/modul-ajar.ts) | **Verified** | Status modul: `draf` &rarr; `ditinjau` &rarr; `disetujui` / `diterbitkan` atau `ditolak`. Fitur kloning modul (`clonedFromId`) dan revisi versi bertahap (`version + 1`). |
+| **Layar Wizard Modul Ajar Multigrade** | [src/app/dashboard/kurikulum/modul-ajar/baru/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/modul-ajar/baru/page.tsx), [src/components/curriculum/ModulAjarWizard.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/ModulAjarWizard.tsx) | **Verified** | Wizard interaktif memilih kelompok, mapel, TP berdampingan, durasi JP, integrasi irisan materi, preview instan pola rotasi, dan tombol simpan draf. |
+| **Layar Detail Workspace, Rubrik & Format Cetak Resmi** | [src/app/dashboard/kurikulum/modul-ajar/[id]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/modul-ajar/%5Bid%5D/page.tsx), [src/components/curriculum/ModulAjarDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/ModulAjarDetailView.tsx) | **Verified** | Workspace responsif dengan 5 tab: Rencana Lengkap, 8 Pola Rotasi Kelas Rangkap, Asesmen & Rubrik, Audit Integritas Kurikulum, dan Format Cetak Resmi Kop SDN SEDAENG II Tosari + Ekspor TXT/DOCX/PDF print. |
+| **Layar Indeks Modul Ajar** | [src/app/dashboard/kurikulum/modul-ajar/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/modul-ajar/page.tsx) | **Verified** | Indeks daftar modul dengan filter pil cepat (Semua, Kelompok A, B, C, Draf, Diterbitkan), ringkasan alokasi JP, dan tombol aksi komprehensif. |
+
+---
+
+### G. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+1. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
    - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
-3. **Instrumen Asesmen Formatif & Portofolio Siswa:**
-   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II Tosari.
+2. **Instrumen Asesmen Formatif & Portofolio Siswa:**
+   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II Tosari dan pelaporan berkala.
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **50 tests PASSED** dari 8 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **62 tests PASSED** dari 9 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
@@ -112,5 +126,6 @@ pie title Status Fitur Proyek
   - `tests/curriculum-validation.test.ts` (7 passed)
   - `tests/material-intersection.test.ts` (13 passed)
   - `tests/atp-generator.test.ts` (8 passed)
+  - `tests/modul-ajar.test.ts` (12 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (25 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (28 rute App Router terkompilasi, First Load JS bersama 103 kB).

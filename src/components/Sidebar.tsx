@@ -15,6 +15,7 @@ import {
   History,
   FileDown,
   Sparkles,
+  BookOpen,
   X,
 } from "lucide-react";
 import { CurrentUser } from "@/lib/auth/session";
@@ -60,6 +61,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
         { name: "Capaian Pembelajaran (CP)", href: "/dashboard/kurikulum/cp", icon: GraduationCap },
         { name: "Tujuan Pembelajaran (TP)", href: "/dashboard/kurikulum/tp", icon: LayoutDashboard },
         { name: "Alur Tujuan (ATP)", href: "/dashboard/kurikulum/atp", icon: Calendar },
+        { name: "Modul Ajar Multigrade", href: "/dashboard/kurikulum/modul-ajar", icon: BookOpen },
         { name: "Riwayat Versi", href: "/dashboard/kurikulum/versi", icon: History },
         { name: "Ekspor Kurikulum", href: "/dashboard/kurikulum/ekspor", icon: FileDown },
       ],

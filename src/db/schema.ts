@@ -284,17 +284,96 @@ export const validationIssues = pgTable("validation_issues", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
-// 11. Modul Ajar Multigrade
+// 11. Modul Ajar Multigrade (Multigrade Lesson Plans)
 export const multigradeLessonPlans = pgTable("multigrade_lesson_plans", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
   groupId: text("group_id").references(() => multigradeGroups.id).notNull(),
   subjectId: text("subject_id").references(() => subjects.id).notNull(),
-  topic: text("topic").notNull(),
-  durationMinutes: integer("duration_minutes").default(70).notNull(),
-  differentiatedStrategy: jsonb("differentiated_strategy").$type<Record<string, unknown>>().notNull(),
+  phase: text("phase").default("Fase A").notNull(),
+  grades: text("grades").default("1,2").notNull(),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  allocatedHours: integer("allocated_hours").default(2).notNull(), // Alokasi JP
+  durationMinutes: integer("duration_minutes").default(70).notNull(), // Durasi menit
+  topic: text("topic").notNull(), // Tema / Topik Pembelajaran
+  essentialMaterial: text("essential_material").default("").notNull(), // Materi Esensial
+  initialCompetency: text("initial_competency").default("").notNull(), // Kompetensi Awal
+  learningObjectives: jsonb("learning_objectives").$type<Array<{
+    grade: number;
+    tpId: string;
+    tpCode: string;
+    competency: string;
+    description: string;
+  }>>().default([]).notNull(), // Target per jenjang kelas (tidak dipaksakan sama)
+  curriculumReferences: jsonb("curriculum_references").$type<{
+    cpId?: string;
+    cpCode?: string;
+    cpElement?: string;
+    atpPlanId?: string;
+    atpPlanTitle?: string;
+    materialMapId?: string;
+    tpIds: string[];
+  }>().default({ tpIds: [] }).notNull(),
+  mediaAndResources: jsonb("media_and_resources").$type<{
+    media: string[];
+    toolsAndMaterials: string[];
+    learningSources: string[];
+    localContextNotes?: string;
+  }>().default({ media: [], toolsAndMaterials: [], learningSources: [] }).notNull(),
+  teachingSteps: jsonb("teaching_steps").$type<Array<{
+    stepNumber: number;
+    stepName: string;
+    durationMinutes: number;
+    patternType: "bersama" | "bimbingan_kelompok_1" | "mandiri_kelompok_2" | "bimbingan_kelompok_2" | "mandiri_kelompok_1" | "diferensiasi_kelas" | "berbagi_hasil" | "asesmen_refleksi";
+    teacherRole: string;
+    lowerGradeActivity: string;
+    higherGradeActivity: string;
+    classroomManagementNotes: string;
+  }>>().default([]).notNull(), // 8 Pola Aktivitas Rotasi Kelas Rangkap
+  differentiation: jsonb("differentiation").$type<{
+    content: { lowerGrade: string; higherGrade: string };
+    process: { lowerGrade: string; higherGrade: string };
+    product: { lowerGrade: string; higherGrade: string };
+  }>().default({
+    content: { lowerGrade: "", higherGrade: "" },
+    process: { lowerGrade: "", higherGrade: "" },
+    product: { lowerGrade: "", higherGrade: "" },
+  }).notNull(),
+  assessments: jsonb("assessments").$type<{
+    diagnostic: { technique: string; instrument: string; questions: string[] };
+    formative: {
+      lowerGradeCriteria: string;
+      higherGradeCriteria: string;
+      observationRubric: Array<{ criteria: string; perluBimbingan: string; cukup: string; baik: string; sangatBaik: string }>;
+    };
+    sumatif?: { technique: string; testItems: string };
+  }>().default({
+    diagnostic: { technique: "Tanya jawab lisan pemantik", instrument: "Daftar pertanyaan apersepsi", questions: [] },
+    formative: { lowerGradeCriteria: "", higherGradeCriteria: "", observationRubric: [] },
+  }).notNull(),
+  reflections: jsonb("reflections").$type<{
+    teacherReflectionGuide: string[];
+    studentReflectionQuestions: string[];
+  }>().default({ teacherReflectionGuide: [], studentReflectionQuestions: [] }).notNull(),
+  remedialAndEnrichment: jsonb("remedial_and_enrichment").$type<{
+    remedialPlan: string;
+    enrichmentPlan: string;
+    followUpAction: string;
+  }>().default({ remedialPlan: "", enrichmentPlan: "", followUpAction: "" }).notNull(),
+  differentiatedStrategy: jsonb("differentiated_strategy").$type<Record<string, unknown>>().default({}).notNull(),
+  teacherNotes: text("teacher_notes"), // Kondisi pembelajaran & kebutuhan siswa Tosari
+  status: text("status", { enum: ["draft", "in_review", "approved", "published", "archived"] }).default("draft").notNull(),
   teacherId: uuid("teacher_id").references(() => users.id),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  rejectionNotes: text("rejection_notes"),
+  version: integer("version").default(1).notNull(),
+  versionNotes: text("version_notes"),
+  clonedFromId: uuid("cloned_from_id"),
   aiAssisted: boolean("ai_assisted").default(false).notNull(),
+  aiProvider: text("ai_provider").default("manual").notNull(), // "gemini", "mock_local", "manual"
+  aiModel: text("ai_model").default("manual").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });

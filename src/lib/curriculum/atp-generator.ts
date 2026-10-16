@@ -412,8 +412,8 @@ export async function generateMultigradeAtp(
 
       // Lower Grade Item
       if (lowerTp && (!options.targetGrade || options.targetGrade === lowerGrade)) {
-        const startW = currentWeekLower;
-        const endW = Math.min(startW + 1, 18);
+        const startW = Math.min(currentWeekLower, 17);
+        const endW = Math.min(Math.max(startW + 1, currentWeekLower + 1), 18);
 
         lowerItem = {
           tpId: lowerTp.id,
@@ -444,8 +444,8 @@ export async function generateMultigradeAtp(
 
       // Higher Grade Item
       if (higherTp && (!options.targetGrade || options.targetGrade === higherGrade)) {
-        const startW = currentWeekHigher;
-        const endW = Math.min(startW + 1, 18);
+        const startW = Math.min(currentWeekHigher, 17);
+        const endW = Math.min(Math.max(startW + 1, currentWeekHigher + 1), 18);
 
         higherItem = {
           tpId: higherTp.id,
@@ -548,13 +548,17 @@ export async function generateMultigradeAtp(
 
   const promesEntries: PromesEntry[] = generatedItems.map((item, idx) => {
     const weeklyDistribution: Record<number, number> = {};
-    const weeksList = item.semester === "Ganjil" ? promesWeeksGanjil : promesWeeksGenap;
-
-    const span = Math.max(1, item.endWeek - item.startWeek + 1);
+    const startWeek = Math.min(item.startWeek, item.endWeek);
+    const endWeek = Math.max(item.startWeek, item.endWeek);
+    const span = Math.max(1, endWeek - startWeek + 1);
     const hoursPerWeekAlloc = Math.round(item.allocatedHours / span) || hoursPerWeek;
 
-    for (let w = item.startWeek; w <= item.endWeek; w++) {
+    for (let w = startWeek; w <= endWeek; w++) {
       weeklyDistribution[w] = hoursPerWeekAlloc;
+    }
+
+    if (Object.keys(weeklyDistribution).length === 0) {
+      weeklyDistribution[Math.min(startWeek, 18)] = item.allocatedHours;
     }
 
     return {

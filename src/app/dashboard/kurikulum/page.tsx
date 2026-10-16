@@ -26,6 +26,7 @@ export default async function KurikulumHubPage() {
   const atps = await db.select().from(schema.atpPlans);
   const subjects = await db.select().from(schema.subjects);
   const materialMaps = await db.select().from(schema.multigradeMaterialMaps);
+  const lessonPlans = await db.select().from(schema.multigradeLessonPlans);
 
   // Hitung status
   const approvedCpCount = cps.filter((c) => c.verificationStatus === "approved").length;
@@ -204,6 +205,30 @@ export default async function KurikulumHubPage() {
           </p>
           <div className="mt-4 flex items-center text-xs font-bold text-indigo-600 gap-1">
             <span>Kelola Irisan Materi</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </a>
+
+        <a
+          href="/dashboard/kurikulum/modul-ajar"
+          className="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-sm hover:border-purple-500 hover:shadow-md transition group block bg-gradient-to-br from-purple-50/30 to-white"
+        >
+          <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center mb-3 group-hover:scale-105 transition shadow-sm">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-slate-900 group-hover:text-purple-600 transition">
+              6. Modul Ajar Multigrade (AI)
+            </h2>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-700">
+              {lessonPlans.length} Modul
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-1">
+            Penyusunan modul ajar kelas rangkap dengan 8 pola rotasi bimbingan vs mandiri, diferensiasi konten/proses/produk, dan ekspor cetak resmi.
+          </p>
+          <div className="mt-4 flex items-center text-xs font-bold text-purple-600 gap-1">
+            <span>Kelola Modul Ajar</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
         </a>
