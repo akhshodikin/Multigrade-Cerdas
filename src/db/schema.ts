@@ -322,3 +322,48 @@ export const offlineSyncLogs = pgTable("offline_sync_logs", {
   queuedAt: timestamp("queued_at", { withTimezone: true }).defaultNow().notNull(),
   syncedAt: timestamp("synced_at", { withTimezone: true }),
 });
+
+// 19. Pemetaan Irisan Materi Multigrade (Cross-Cutting Topic Maps)
+export const multigradeMaterialMaps = pgTable("multigrade_material_maps", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  groupId: text("group_id").references(() => multigradeGroups.id).notNull(),
+  subjectId: text("subject_id").references(() => subjects.id).notNull(),
+  academicYear: text("academic_year").default("2024/2025").notNull(),
+  semester: text("semester", { enum: ["Ganjil", "Genap"] }).default("Ganjil").notNull(),
+  durationMinutes: integer("duration_minutes").default(70).notNull(),
+  sharedTheme: text("shared_theme").notNull(),
+  studentConditions: text("student_conditions"),
+  mappingStrategy: text("mapping_strategy", { enum: ["terpadu_sebagian", "terpisah_paralel", "terpadu_penuh"] }).notNull(),
+  aiProvider: text("ai_provider").notNull(), // "gemini", "mock_local", "manual"
+  aiModel: text("ai_model").notNull(),
+  confidenceLevel: text("confidence_level", { enum: ["tinggi", "sedang", "rendah"] }).default("sedang").notNull(),
+  confidenceScore: integer("confidence_score").default(75).notNull(),
+  confidenceDisclaimer: text("confidence_disclaimer").notNull(),
+  structuredOutput: jsonb("structured_output").$type<Record<string, unknown>>().notNull(),
+  status: text("status", { enum: ["draft", "reviewed", "approved", "rejected"] }).default("draft").notNull(),
+  teacherNotes: text("teacher_notes"),
+  rejectionReason: text("rejection_reason"),
+  createdById: uuid("created_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedById: uuid("approved_by_id").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  version: integer("version").default(1).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+// 20. Log Penggunaan & Biaya AI (Token & Cost Tracking)
+export const aiUsageLogs = pgTable("ai_usage_logs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  feature: text("feature").notNull(), // "pemetaan_irisan_materi"
+  provider: text("provider").notNull(), // "gemini", "mock_local"
+  model: text("model").notNull(),
+  promptTokens: integer("prompt_tokens").default(0).notNull(),
+  completionTokens: integer("completion_tokens").default(0).notNull(),
+  totalTokens: integer("total_tokens").default(0).notNull(),
+  estimatedCostUsd: text("estimated_cost_usd").default("0.0000").notNull(),
+  latencyMs: integer("latency_ms").default(0).notNull(),
+  status: text("status", { enum: ["success", "fallback", "error"] }).notNull(),
+  errorMessage: text("error_message"),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});

@@ -63,23 +63,38 @@ pie title Status Fitur Proyek
 
 ---
 
-### D. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
-1. **Pemetaan Materi Pembelajaran dengan Google AI Studio (Gemini SDK):**
-   * Sintesis lembar kerja dan aktivitas dual-track / multi-level per kelompok Fase.
+### D. Pemetaan Irisan Materi Multigrade AI (Tahap 4 - Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **Arsitektur Provider AI Fleksibel (Adapter Pattern)** | [src/lib/ai/provider-interface.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/ai/provider-interface.ts), [src/lib/ai/provider-factory.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/ai/provider-factory.ts) | **Verified** | Dukungan multi-engine: Google Gemini 3.8 Flash (`@google/genai`) dan Mesin Heuristik Lokal Tosari (`MockLocalProvider`). Kunci API tersimpan di server-side. |
+| **Aturan Multigrade: Larangan Penggabungan Paksa** | [src/lib/ai/providers/mock-local-provider.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/ai/providers/mock-local-provider.ts), [src/lib/ai/providers/gemini-provider.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/ai/providers/gemini-provider.ts) | **Verified** | Jika kompetensi berbeda jauh atau tidak cocok digabung, sistem otomatis merekomendasikan `terpisah_paralel` (rotasi kelas rangkap berjenjang) dan TIDAK memaksakan merger. |
+| **Pengamanan Anti-Halusinasi & Zero PII** | [src/app/actions/material-intersection.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/material-intersection.ts) | **Verified** | Verifikasi ID sumber ke database resmi, penolakan ID fiktif, pembersihan teks kondisi siswa dari NIK, HP, atau email pribadi. CP resmi tetap verbatim tanpa perubahan. |
+| **Output Terstruktur Zod (Tema, TP, Rotasi, Diferensiasi, Asesmen)** | [src/lib/ai/types.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/lib/ai/types.ts) | **Verified** | Skema ketat: tema bersama, komparasi berdampingan, TP terpadu vs terpisah, alur 4 fase rotasi (pembuka, bimbingan langsung, mandiri, penutup), diferensiasi (konten, proses, produk), dan disclaimer keyakinan AI. |
+| **Pelacakan Biaya & Log Penggunaan AI** | `src/db/schema.ts` (`ai_usage_logs`) | **Verified** | Pencatatan prompt tokens, completion tokens, total tokens, estimasi biaya USD, latensi (ms), dan status fallback. |
+| **Layar Daftar Pemetaan Irisan** | [src/app/dashboard/kurikulum/irisan-materi/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/irisan-materi/page.tsx) | **Verified** | Kartu ringkasan strategi (`terpadu_sebagian`, `terpisah_paralel`, `terpadu_penuh`), indikator keyakinan, badge status, dan filter kelompok/mapel. |
+| **Layar Wizard Generator & Mode Manual** | [src/app/dashboard/kurikulum/irisan-materi/baru/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/irisan-materi/baru/page.tsx), [src/components/curriculum/MaterialIntersectionWizard.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/MaterialIntersectionWizard.tsx) | **Verified** | Pemilihan kelompok, mapel, TP berdampingan interaktif, peringatan PII real-time, pilihan engine AI, serta fallback mode manual total saat offline. |
+| **Layar Detail & Pengelolaan Alur Pembelajaran** | [src/app/dashboard/kurikulum/irisan-materi/[id]/page.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/dashboard/kurikulum/irisan-materi/[id]/page.tsx), [src/components/curriculum/MaterialIntersectionDetailView.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/components/curriculum/MaterialIntersectionDetailView.tsx) | **Verified** | Tampilan komparasi berdampingan, rincian aktivitas rotasi kelas rangkap, diferensiasi konten/proses/produk, rubrik asesmen, pengeditan guru, persetujuan Kepala Sekolah, dan cetak panduan. |
+
+---
+
+### E. Fitur yang Belum Dibuat (Agenda Tahap Berikutnya)
+1. **Modul Ajar Multigrade Lengkap:**
+   - Generator RPP/Modul Ajar berdiferensiasi siap unduh PDF berdasarkan hasil irisan materi yang disetujui.
 2. **Offline Outbox Sync Engine (IndexedDB & Service Worker):**
-   * Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
+   - Pengisian observasi nilai dan jurnal mengajar saat sinyal seluler Tosari drop, lalu sinkronisasi otomatis saat terhubung kembali.
 3. **Instrumen Asesmen Formatif & Portofolio Siswa:**
-   * Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II.
+   - Rubrik observasi terpadu per TP untuk 27 siswa SDN Sedaeng II.
 
 ---
 
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **29 tests PASSED** dari 6 test files (100% green).
+* **Vitest Suite (Unit & Integration Test):** **42 tests PASSED** dari 7 test files (100% green).
   - `tests/auth.test.ts` (4 passed)
   - `tests/users-and-students.test.ts` (4 passed)
   - `tests/school-and-groups.test.ts` (5 passed)
   - `tests/audit-logs.test.ts` (2 passed)
   - `tests/curriculum-bank.test.ts` (7 passed)
   - `tests/curriculum-validation.test.ts` (7 passed)
+  - `tests/material-intersection.test.ts` (13 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
-* **Next.js Production Build (`next build`):** **Sukses** (21 rute App Router terkompilasi, First Load JS bersama 103 kB).
+* **Next.js Production Build (`next build`):** **Sukses** (24 rute App Router terkompilasi, First Load JS bersama 103 kB).

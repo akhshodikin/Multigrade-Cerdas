@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   History,
   FileDown,
+  Sparkles,
   X,
 } from "lucide-react";
 import { CurrentUser } from "@/lib/auth/session";
@@ -53,6 +54,7 @@ export function Sidebar({ user, isOpen, onClose }: SidebarProps) {
       title: "Bank Kurikulum",
       items: [
         { name: "Ringkasan Kurikulum", href: "/dashboard/kurikulum", icon: Layers },
+        { name: "Irisan Materi AI", href: "/dashboard/kurikulum/irisan-materi", icon: Sparkles },
         { name: "Pusat Validasi", href: "/dashboard/kurikulum/validasi", icon: ShieldCheck },
         { name: "Dokumen Sumber", href: "/dashboard/kurikulum/sumber", icon: School },
         { name: "Capaian Pembelajaran (CP)", href: "/dashboard/kurikulum/cp", icon: GraduationCap },
