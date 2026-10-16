@@ -541,7 +541,7 @@ export function MaterialIntersectionDetailView({
                         <span className="font-semibold text-slate-700">Konsep Inti Bersama: </span>
                         <span className="text-slate-900">{m.sharedCoreConcept}</span>
                       </div>
-                      <div className="text-slate-600 italic">"{m.rationale}"</div>
+                      <div className="text-slate-600 italic">&ldquo;{m.rationale}&rdquo;</div>
                     </div>
                   ))}
                 </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -109,7 +110,7 @@ export default async function KurikulumHubPage() {
 
       {/* Navigation Modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a
+        <Link
           href="/dashboard/kurikulum/sumber"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-400 hover:shadow-md transition group block"
         >
@@ -126,9 +127,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Dokumen Sumber</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/cp"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-400 hover:shadow-md transition group block"
         >
@@ -145,9 +146,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Bank CP</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/tp"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-purple-400 hover:shadow-md transition group block"
         >
@@ -164,9 +165,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Bank TP</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/atp"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition group block"
         >
@@ -183,9 +184,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Alur ATP</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/irisan-materi"
           className="bg-white p-6 rounded-2xl border-2 border-indigo-200 shadow-sm hover:border-indigo-500 hover:shadow-md transition group block bg-gradient-to-br from-indigo-50/30 to-white"
         >
@@ -207,9 +208,9 @@ export default async function KurikulumHubPage() {
             <span>Kelola Irisan Materi</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/modul-ajar"
           className="bg-white p-6 rounded-2xl border-2 border-purple-200 shadow-sm hover:border-purple-500 hover:shadow-md transition group block bg-gradient-to-br from-purple-50/30 to-white"
         >
@@ -231,9 +232,9 @@ export default async function KurikulumHubPage() {
             <span>Kelola Modul Ajar</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/lkpd"
           className="bg-white p-6 rounded-2xl border-2 border-emerald-200 shadow-sm hover:border-emerald-500 hover:shadow-md transition group block bg-gradient-to-br from-emerald-50/30 to-white"
         >
@@ -252,9 +253,9 @@ export default async function KurikulumHubPage() {
             <span>Kelola LKPD</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/media-pembelajaran"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-400 hover:shadow-md transition group block"
         >
@@ -273,9 +274,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Perpustakaan Media</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/versi"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-400 hover:shadow-md transition group block"
         >
@@ -292,9 +293,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Riwayat Versi</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/validasi"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-emerald-400 hover:shadow-md transition group block"
         >
@@ -311,9 +312,9 @@ export default async function KurikulumHubPage() {
             <span>Buka Pusat Validasi</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/dashboard/kurikulum/ekspor"
           className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-rose-400 hover:shadow-md transition group block"
         >
@@ -330,7 +331,7 @@ export default async function KurikulumHubPage() {
             <span>Buka Portal Ekspor</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
-        </a>
+        </Link>
       </div>
     </div>
   );

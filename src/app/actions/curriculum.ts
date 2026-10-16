@@ -35,9 +35,33 @@ export async function importCurriculumSourceAction(formData: FormData) {
   let fileName = "";
   let needsManualReview = false;
 
+  const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB limit
+  if (file && file.size > MAX_FILE_SIZE) {
+    return {
+      success: false,
+      error: "Ukuran berkas melebihi batas keamanan maksimal 15 MB.",
+    };
+  }
+
   if (file && file.size > 0 && fileType !== "manual") {
     fileName = file.name;
     fileSize = file.size;
+
+    // Validasi ekstensi terhadap tipe berkas yang dideklarasikan
+    const ext = fileName.split(".").pop()?.toLowerCase();
+    const validExtensions: Record<string, string[]> = {
+      pdf: ["pdf"],
+      docx: ["docx"],
+      xlsx: ["xlsx", "xls"],
+    };
+
+    if (!ext || !validExtensions[fileType]?.includes(ext)) {
+      return {
+        success: false,
+        error: `Format ekstensi .${ext} tidak sesuai dengan tipe berkas '${fileType}' yang dipilih.`,
+      };
+    }
+
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 

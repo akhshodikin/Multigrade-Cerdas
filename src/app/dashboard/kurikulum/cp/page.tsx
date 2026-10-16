@@ -71,38 +71,38 @@ export default async function CapaianPembelajaranPage({
           <Filter className="w-3.5 h-3.5" />
           Fase:
         </span>
-        <a
+        <Link
           href="/dashboard/kurikulum/cp"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             !filterFase ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Semua Fase ({cps.length})
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/cp?fase=Fase+A"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase A" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase A (Kls 1 &amp; 2)
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/cp?fase=Fase+B"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase B" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase B (Kls 3 &amp; 4)
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/cp?fase=Fase+C"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase C" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase C (Kls 5 &amp; 6)
-        </a>
+        </Link>
       </div>
 
       {/* List of CPs */}

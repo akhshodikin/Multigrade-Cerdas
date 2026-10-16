@@ -218,8 +218,8 @@ describe("Pengujian Mode Offline-First & Sinkronisasi Multigrade Cerdas AI (SDN 
         essentialMaterial: "Material Server",
         initialCompetency: "Awal",
         learningObjectives: [],
-        curriculumReferences: {},
-        mediaAndResources: {},
+        curriculumReferences: { tpIds: [] },
+        mediaAndResources: { media: [], toolsAndMaterials: [], learningSources: [] },
         teachingSteps: [
           {
             stepNumber: 1,

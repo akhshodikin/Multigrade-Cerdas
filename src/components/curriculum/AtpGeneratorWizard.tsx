@@ -398,7 +398,7 @@ export function AtpGeneratorWizard({ groups, subjects }: AtpGeneratorWizardProps
                   <div className="font-bold">Sinkronisasi Irisan Materi AI Aktif:</div>
                   <p className="mt-0.5">
                     Generator secara otomatis menyinkronkan urutan dengan pemetaan materi yang telah disetujui:{" "}
-                    <strong>"{previewResult.approvedMaterialMapUsed.theme}"</strong> (Strategi:{" "}
+                    <strong>&ldquo;{previewResult.approvedMaterialMapUsed.theme}&rdquo;</strong> (Strategi:{" "}
                     <em>{previewResult.approvedMaterialMapUsed.strategy}</em>).
                   </p>
                 </div>

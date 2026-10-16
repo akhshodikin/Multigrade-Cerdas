@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: multigrade-cerdas-app
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3005}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PGLITE_DATA_DIR=/app/data/postgres
+    volumes:
+      # Persistent PostgreSQL data storage for SDN Kandangan I Tosari
+      - ./data/postgres:/app/data/postgres
+      # Automated database backup directory
+      - ./backups:/app/backups
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3005/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  # Optional HTTPS Reverse Proxy with automatic SSL certificate management (Caddy)
+  # Uncomment below for public VPS deployment:
+  # caddy:
+  #   image: caddy:2-alpine
+  #   container_name: multigrade-cerdas-caddy
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+  #   depends_on:
+  #     - app
+
+# volumes:
+#   caddy_data:
+#   caddy_config:

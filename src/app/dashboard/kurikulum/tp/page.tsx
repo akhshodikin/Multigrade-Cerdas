@@ -67,38 +67,38 @@ export default async function TujuanPembelajaranPage({
           <Filter className="w-3.5 h-3.5" />
           Fase:
         </span>
-        <a
+        <Link
           href="/dashboard/kurikulum/tp"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             !filterFase ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Semua ({tps.length})
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/tp?fase=Fase+A"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase A" ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase A (Kls 1-2)
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/tp?fase=Fase+B"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase B" ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase B (Kls 3-4)
-        </a>
-        <a
+        </Link>
+        <Link
           href="/dashboard/kurikulum/tp?fase=Fase+C"
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
             filterFase === "Fase C" ? "bg-purple-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
           Fase C (Kls 5-6)
-        </a>
+        </Link>
       </div>
 
       {/* List of TPs */}

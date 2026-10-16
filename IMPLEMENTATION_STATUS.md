@@ -170,21 +170,40 @@ pie title Status Fitur Proyek
 
 ---
 
+### K. Hardening, Pengujian Menyeluruh & Kesiapan Deployment (Selesai & Terverifikasi)
+| Komponen / Fitur | Lokasi Berkas | Status Pengujian | Keterangan |
+|---|---|---|---|
+| **HTTP Security Headers & CSP** | [next.config.mjs](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/next.config.mjs) | **Verified** | HSTS (`max-age=63072000`), CSP strict, X-Frame-Options (`DENY`), X-Content-Type-Options (`nosniff`), Referrer-Policy, dan penonaktifan header `X-Powered-By`. |
+| **Proteksi Middleware Dashboard** | [src/middleware.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/middleware.ts) | **Verified** | Proteksi terpusat rute `/dashboard/*`. Verifikasi cookie sesi `session_token`, redirect otomatis ke login jika tidak sah, dan injeksi security headers pada setiap respons. |
+| **Validasi Ekstensi & Ukuran Upload** | [src/app/actions/curriculum.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/actions/curriculum.ts) | **Verified** | Batas berkas 15 MB, validasi ketat ekstensi `.pdf`/`.docx`/`.xlsx` terhadap tipe MIME yang dideklarasikan, penolakan ekstensi terlarang (misal `.exe`, `.sh`). |
+| **Error Boundaries & Proteksi Stack Trace** | [src/app/error.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/error.tsx), [src/app/not-found.tsx](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/not-found.tsx) | **Verified** | Error boundary global yang menyajikan pesan ramah dalam Bahasa Indonesia tanpa membocorkan stack trace internal, path server, atau skema DB ke klien. |
+| **Automasi Pencadangan Database (SHA-256)** | [scripts/backup-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/scripts/backup-db.ts) | **Verified** | Ekspor JSON mandiri 23 tabel skema dengan kalkulasi checksum digital SHA-256 (`.json.sha256`) dan pencatatan audit log `DATABASE_BACKUP`. |
+| **Automasi Pemulihan Database (FK-Ordered)** | [scripts/restore-db.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/scripts/restore-db.ts) | **Verified** | Verifikasi integritas hash SHA-256 sebelum pemulihan, hidrasi string tanggal ISO ke objek `Date`, restorasi urut dependensi Foreign Key, dan pencatatan audit log `DATABASE_RESTORE`. |
+| **Probe Kesehatan Kontainer (Healthcheck)** | [src/app/api/health/route.ts](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/src/app/api/health/route.ts) | **Verified** | Endpoint `/api/health` untuk Docker & load balancer yang memverifikasi kesiapan web server dan responsivitas database. |
+| **Multi-Stage Docker & Non-Root User** | [Dockerfile](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/Dockerfile), [docker-compose.yml](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/docker-compose.yml), [.dockerignore](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/.dockerignore) | **Verified** | Container production-grade berbasis Alpine Node.js 20, berjalan dengan user non-root `nextjs:nodejs` (UID 1001), persistent volume untuk `./data/postgres` dan `./backups`. |
+| **Dokumentasi Lengkap Operasional** | [README.md](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/README.md), [DEPLOYMENT.md](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/DEPLOYMENT.md), [BACKUP_RESTORE.md](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/BACKUP_RESTORE.md), [SECURITY_CHECKLIST.md](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/SECURITY_CHECKLIST.md), [USER_GUIDE.md](file:///c:/Users/UseR/Videos/Antigravity%20Project/MULTIGRADE%20CERDAS/USER_GUIDE.md) | **Verified** | Seluruh 6 dokumen lengkap, mencakup petunjuk teknis, mitigasi risiko, checklist keamanan 14 area, panduan disaster recovery, dan panduan pengguna berbahasa Indonesia. |
+
+---
+
 ## 3. Hasil Pengujian Mutu Terakhir
-* **Vitest Suite (Unit & Integration Test):** **99 tests PASSED** dari 13 test files (100% green).
-  - `tests/auth.test.ts` (4 passed)
-  - `tests/users-and-students.test.ts` (4 passed)
-  - `tests/school-and-groups.test.ts` (5 passed)
-  - `tests/audit-logs.test.ts` (2 passed)
+* **Vitest Suite (Unit, Integration & E2E Security Tests):** **110 tests PASSED** dari 15 test files (100% green).
   - `tests/curriculum-bank.test.ts` (7 passed)
-  - `tests/curriculum-validation.test.ts` (7 passed)
-  - `tests/material-intersection.test.ts` (13 passed)
   - `tests/atp-generator.test.ts` (8 passed)
   - `tests/modul-ajar.test.ts` (12 passed)
+  - `tests/auth.test.ts` (4 passed)
   - `tests/lkpd-media.test.ts` (12 passed)
-  - `tests/assessment-progress.test.ts` (8 passed)
-  - `tests/reports-export.test.ts` (7 passed)
+  - `tests/audit-logs.test.ts` (2 passed)
+  - `tests/database-backup-restore.test.ts` (5 passed)
+  - `tests/school-and-groups.test.ts` (5 passed)
   - `tests/offline-sync.test.ts` (10 passed)
+  - `tests/curriculum-validation.test.ts` (7 passed)
+  - `tests/reports-export.test.ts` (7 passed)
+  - `tests/assessment-progress.test.ts` (8 passed)
+  - `tests/e2e-security-workflow.test.ts` (6 passed)
+  - `tests/users-and-students.test.ts` (4 passed)
+  - `tests/material-intersection.test.ts` (13 passed)
 * **TypeScript Compilation (`tsc --noEmit`):** **0 error** (Strict Mode, 100% type safety).
+* **ESLint Verification (`eslint src/`):** **0 error / 0 warning** (ESLint 9 Flat Config terverifikasi).
 * **Next.js Production Routes:** Seluruh rute App Router terintegrasi dengan penanganan dynamic rendering yang tepat.
+
 

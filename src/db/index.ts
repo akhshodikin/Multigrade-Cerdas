@@ -14,7 +14,6 @@ if (!fs.existsSync(DATA_DIR)) {
 
 // Global singleton client to persist across hot reloads in Next.js development
 declare global {
-  // eslint-disable-next-line no-var
   var __pgliteClient: PGlite | undefined;
 }
 
