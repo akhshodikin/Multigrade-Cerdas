@@ -118,11 +118,12 @@ export default async function GuruPage() {
                             isAdmin={isAdmin}
                           />
                           {u.id !== currentUser.id && (
-                            <form action={toggleUserStatusFormAction}>
-                              <input type="hidden" name="userId" value={u.id} />
-                              <input type="hidden" name="currentStatus" value={String(u.isActive)} />
+                            <form action={toggleUserStatusFormAction} suppressHydrationWarning>
+                              <input type="hidden" name="userId" value={u.id} suppressHydrationWarning />
+                              <input type="hidden" name="currentStatus" value={String(u.isActive)} suppressHydrationWarning />
                               <button
                                 type="submit"
+                                suppressHydrationWarning
                                 className={`px-2 py-1 rounded text-[11px] font-bold border transition ${
                                   u.isActive
                                     ? "text-rose-700 border-rose-200 hover:bg-rose-50"
@@ -155,6 +156,7 @@ export default async function GuruPage() {
           <form
             action={createUserFormAction}
             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            suppressHydrationWarning
           >
             <div>
               <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
@@ -165,6 +167,7 @@ export default async function GuruPage() {
                 name="name"
                 required
                 placeholder="Nama Guru, S.Pd."
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </div>
@@ -178,6 +181,7 @@ export default async function GuruPage() {
                 name="email"
                 required
                 placeholder="nama@sedaeng2.sch.id"
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </div>
@@ -189,6 +193,7 @@ export default async function GuruPage() {
               <select
                 name="role"
                 required
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               >
                 <option value="teacher">Guru Pengampu</option>
@@ -203,6 +208,7 @@ export default async function GuruPage() {
               </label>
               <select
                 name="assignedGroupId"
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               >
                 <option value="">-- Tidak Ditugaskan Khusus --</option>
@@ -220,6 +226,7 @@ export default async function GuruPage() {
                 type="text"
                 name="nip"
                 placeholder="1985..."
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </div>
@@ -232,6 +239,7 @@ export default async function GuruPage() {
                 type="text"
                 name="phone"
                 placeholder="081..."
+                suppressHydrationWarning
                 className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               />
             </div>
@@ -239,6 +247,7 @@ export default async function GuruPage() {
             <div className="sm:col-span-2 pt-2 flex justify-end">
               <button
                 type="submit"
+                suppressHydrationWarning
                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-1.5"
               >
                 <UserPlus className="w-4 h-4" />

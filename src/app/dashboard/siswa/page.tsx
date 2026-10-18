@@ -191,11 +191,12 @@ export default async function SiswaPage({
                             }}
                           />
                         )}
-                        <form action={toggleStudentStatusFormAction}>
-                          <input type="hidden" name="studentId" value={s.id} />
-                          <input type="hidden" name="currentStatus" value={String(s.isActive)} />
+                        <form action={toggleStudentStatusFormAction} suppressHydrationWarning>
+                          <input type="hidden" name="studentId" value={s.id} suppressHydrationWarning />
+                          <input type="hidden" name="currentStatus" value={String(s.isActive)} suppressHydrationWarning />
                           <button
                             type="submit"
+                            suppressHydrationWarning
                             className={`px-2 py-1 rounded text-[11px] font-bold border transition ${
                               s.isActive
                                 ? "text-rose-700 border-rose-200 hover:bg-rose-50"
@@ -225,6 +226,7 @@ export default async function SiswaPage({
         <form
           action={createStudentFormAction}
           className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+          suppressHydrationWarning
         >
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
@@ -235,6 +237,7 @@ export default async function SiswaPage({
               name="studentCode"
               required
               placeholder="SDN2-A-10"
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
@@ -248,6 +251,7 @@ export default async function SiswaPage({
               name="fullName"
               required
               placeholder="Nama Siswa (Sintetis)"
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
@@ -261,6 +265,7 @@ export default async function SiswaPage({
               name="displayName"
               required
               placeholder="Panggilan / Inisial"
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
@@ -272,6 +277,7 @@ export default async function SiswaPage({
             <select
               name="classId"
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             >
               <option value="1">Kelas 1 &rarr; Masuk Kelompok A (Fase A)</option>
@@ -290,6 +296,7 @@ export default async function SiswaPage({
             <select
               name="gender"
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             >
               <option value="L">Laki-laki (L)</option>
@@ -305,6 +312,7 @@ export default async function SiswaPage({
               type="text"
               name="guardianName"
               placeholder="Orang Tua / Wali Siswa"
+              suppressHydrationWarning
               className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
@@ -312,6 +320,7 @@ export default async function SiswaPage({
           <div className="sm:col-span-3 pt-2 flex justify-end">
             <button
               type="submit"
+              suppressHydrationWarning
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-1.5"
             >
               <UserPlus className="w-4 h-4" />
