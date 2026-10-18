@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { AlertTriangle, RefreshCw, Home, Database } from "lucide-react";
 
 export default function GlobalErrorPage({
   error,
@@ -41,15 +41,24 @@ export default function GlobalErrorPage({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <button
             onClick={() => reset()}
-            className="w-full sm:w-auto px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             <span>Coba Lagi</span>
           </button>
 
+          <a
+            href="/api/setup"
+            className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2"
+            title="Klik jika tabel basis data Vercel Postgres belum dibuat"
+          >
+            <Database className="w-4 h-4" />
+            <span>Inisialisasi Database</span>
+          </a>
+
           <Link
             href="/dashboard"
-            className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2"
           >
             <Home className="w-4 h-4" />
             <span>Ke Dashboard</span>
