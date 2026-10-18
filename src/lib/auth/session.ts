@@ -98,14 +98,20 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   }
 
   const now = new Date();
-  const activeSessions = await db
-    .select({
-      sessionId: schema.sessions.id,
-      user: schema.users,
-    })
-    .from(schema.sessions)
-    .innerJoin(schema.users, eq(schema.sessions.userId, schema.users.id))
-    .where(and(eq(schema.sessions.id, token), gt(schema.sessions.expiresAt, now)));
+  let activeSessions;
+  try {
+    activeSessions = await db
+      .select({
+        sessionId: schema.sessions.id,
+        user: schema.users,
+      })
+      .from(schema.sessions)
+      .innerJoin(schema.users, eq(schema.sessions.userId, schema.users.id))
+      .where(and(eq(schema.sessions.id, token), gt(schema.sessions.expiresAt, now)));
+  } catch (err) {
+    console.warn("[Auth] Failed to query active session from database:", err);
+    return null;
+  }
 
   if (activeSessions.length === 0) {
     try {

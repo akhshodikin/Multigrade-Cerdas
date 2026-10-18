@@ -19,12 +19,19 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const profile = await db.select().from(schema.schoolProfile).where(eq(schema.schoolProfile.id, 1));
-  const schoolData = profile[0] || {
+  let schoolData = {
     name: "SDN SEDAENG II Tosari",
     activeAcademicYear: "2024/2025",
     activeSemester: "Ganjil",
   };
+  try {
+    const profile = await db.select().from(schema.schoolProfile).where(eq(schema.schoolProfile.id, 1));
+    if (profile[0]) {
+      schoolData = profile[0];
+    }
+  } catch (err) {
+    console.warn("[DashboardLayout] Could not fetch school profile from DB:", err);
+  }
 
   return (
     <DashboardLayoutClient

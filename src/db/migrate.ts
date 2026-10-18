@@ -2,9 +2,11 @@ import fs from "fs";
 import path from "path";
 import { getPGliteClient } from "./index";
 
+import postgres from "postgres";
+
 export async function runMigrations() {
   console.log("Menjalankan migrasi database PostgreSQL...");
-  const client = await getPGliteClient();
+  const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
   const drizzleDir = path.join(process.cwd(), "drizzle");
   if (!fs.existsSync(drizzleDir)) {
@@ -16,25 +18,63 @@ export async function runMigrations() {
     .filter((f) => f.endsWith(".sql"))
     .sort();
 
-  for (const file of sqlFiles) {
-    const fullPath = path.join(drizzleDir, file);
-    console.log(`Mengaplikasikan migrasi: ${file}...`);
-    const sqlContent = fs.readFileSync(fullPath, "utf-8");
-    const statements = sqlContent
-      .split("--> statement-breakpoint")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+  if (databaseUrl) {
+    const isLocal = databaseUrl.includes("localhost") || databaseUrl.includes("127.0.0.1");
+    const sql = postgres(databaseUrl, {
+      prepare: false,
+      ssl: isLocal ? false : "require",
+      max: 1,
+    });
 
-    for (const statement of statements) {
-      try {
-        await client.exec(statement);
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (
-          !errMsg.includes("already exists") &&
-          !errMsg.includes("duplicate key")
-        ) {
-          console.warn(`Peringatan saat eksekusi ${file}:`, errMsg);
+    try {
+      for (const file of sqlFiles) {
+        const fullPath = path.join(drizzleDir, file);
+        console.log(`Mengaplikasikan migrasi cloud: ${file}...`);
+        const sqlContent = fs.readFileSync(fullPath, "utf-8");
+        const statements = sqlContent
+          .split("--> statement-breakpoint")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+
+        for (const statement of statements) {
+          try {
+            await sql.unsafe(statement);
+          } catch (err: unknown) {
+            const errMsg = err instanceof Error ? err.message : String(err);
+            if (
+              !errMsg.includes("already exists") &&
+              !errMsg.includes("duplicate key")
+            ) {
+              console.warn(`Peringatan saat eksekusi ${file}:`, errMsg);
+            }
+          }
+        }
+      }
+    } finally {
+      await sql.end({ timeout: 5 });
+    }
+  } else {
+    const client = await getPGliteClient();
+    for (const file of sqlFiles) {
+      const fullPath = path.join(drizzleDir, file);
+      console.log(`Mengaplikasikan migrasi local: ${file}...`);
+      const sqlContent = fs.readFileSync(fullPath, "utf-8");
+      const statements = sqlContent
+        .split("--> statement-breakpoint")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+
+      for (const statement of statements) {
+        try {
+          await client.exec(statement);
+        } catch (err: unknown) {
+          const errMsg = err instanceof Error ? err.message : String(err);
+          if (
+            !errMsg.includes("already exists") &&
+            !errMsg.includes("duplicate key")
+          ) {
+            console.warn(`Peringatan saat eksekusi ${file}:`, errMsg);
+          }
         }
       }
     }
