@@ -87,7 +87,7 @@ export async function createDatabaseBackup(customBackupDir?: string): Promise<{
 
   const payload: DatabaseBackupPayload = {
     version: 1,
-    schoolName: "SDN Kandangan I Tosari",
+    schoolName: "SDN SEDAENG II TOSARI",
     npsn: "20519069",
     exportedAt: new Date().toISOString(),
     tables,
@@ -95,7 +95,7 @@ export async function createDatabaseBackup(customBackupDir?: string): Promise<{
   };
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const backupFileName = `backup-sdn-kandangan-1-${timestamp}.json`;
+  const backupFileName = `backup-sdn-sedaeng-2-${timestamp}.json`;
   const backupFilePath = path.join(backupDir, backupFileName);
 
   const jsonString = JSON.stringify(payload, null, 2);

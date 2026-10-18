@@ -1,10 +1,10 @@
 UPDATE school_profile
-SET name = 'SDN Kandangan I Tosari',
+SET name = 'SDN SEDAENG II TOSARI',
     npsn = '20519069',
-    address = 'Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177',
+    address = 'Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177',
     headmaster_name = 'Bambang Sutrisno, S.Pd., M.Pd.',
-    email = 'sdnkandangan1tosari@gmail.com'
-WHERE id = 1 AND (name LIKE '%Sedaeng%' OR name LIKE '%SEDAENG%');
+    email = 'sdnsedaeng2tosari@gmail.com'
+WHERE id = 1;
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "teaching_journals" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),

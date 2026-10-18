@@ -16,7 +16,7 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - PGLITE_DATA_DIR=/app/data/postgres
     volumes:
-      # Persistent PostgreSQL data storage for SDN Kandangan I Tosari
+      # Persistent PostgreSQL data storage for SDN SEDAENG II TOSARI
       - ./data/postgres:/app/data/postgres
       # Automated database backup directory
       - ./backups:/app/backups

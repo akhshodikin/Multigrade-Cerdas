@@ -1,5 +1,5 @@
 # Panduan Pengguna Multigrade Cerdas AI (User Manual)
-**Sekolah:** SDN Kandangan I Tosari, Kec. Tosari, Kab. Pasuruan  
+**Sekolah:** SDN SEDAENG II TOSARI, Kec. Tosari, Kab. Pasuruan  
 **Penyusun:** Tim Pengembang Kurikulum Multigrade Cerdas AI  
 **Bahasa:** Bahasa Indonesia  
 
@@ -22,7 +22,7 @@
    - 4.2 [Pemantauan Jurnal Guru & Kehadiran Kelas](#42-pemantauan-jurnal-guru)
    - 4.3 [Laporan Ringkasan Eksekutif Pelaksanaan Pembelajaran](#43-laporan-ringkasan-eksekutif)
 5. [Panduan untuk Administrator Sekolah](#5-panduan-untuk-administrator-sekolah)
-   - 5.1 [Manajemen Profil Sekolah SDN Kandangan I](#51-manajemen-profil-sekolah)
+   - 5.1 [Manajemen Profil Sekolah SDN SEDAENG II](#51-manajemen-profil-sekolah)
    - 5.2 [Manajemen Akun Guru & Penugasan Kelompok](#52-manajemen-akun-guru)
    - 5.3 [Pencadangan (Backup) & Pemulihan Database](#53-pencadangan-dan-pemulihan)
    - 5.4 [Pemeriksaan Audit Log Keamanan](#54-pemeriksaan-audit-log)
@@ -31,7 +31,7 @@
 
 ## 1. Pendahuluan & Konsep Multigrade Cerdas
 
-Multigrade Cerdas AI adalah sistem terpadu yang dirancang khusus untuk memfasilitasi pembelajaran kelas rangkap (*multigrade teaching*) di **SDN Kandangan I Tosari**. Kondisi geografis lereng pegunungan Tengger/Bromo dengan jumlah siswa efisien menuntut penggabungan kelas:
+Multigrade Cerdas AI adalah sistem terpadu yang dirancang khusus untuk memfasilitasi pembelajaran kelas rangkap (*multigrade teaching*) di **SDN SEDAENG II TOSARI**. Kondisi geografis lereng pegunungan Tengger/Bromo dengan jumlah siswa efisien menuntut penggabungan kelas:
 - **Kelompok A:** Kelas 1 dan Kelas 2 (Fase A)
 - **Kelompok B:** Kelas 3 dan Kelas 4 (Fase B)
 - **Kelompok C:** Kelas 5 dan Kelas 6 (Fase C)
@@ -131,7 +131,7 @@ Jika koneksi internet di sekolah terputus:
 ### 4.3 Laporan Ringkasan Eksekutif
 - Buka menu **Laporan & Ekspor**.
 - Pilih **"Ringkasan Pelaksanaan Pembelajaran untuk Kepala Sekolah"**.
-- Sistem menyusun laporan resmi berformat A4 lengkap dengan kop surat SDN Kandangan I Tosari, matriks ketercapaian kurikulum seluruh kelompok, dan ruang tanda tangan resmi Kepala Sekolah.
+- Sistem menyusun laporan resmi berformat A4 lengkap dengan kop surat SDN SEDAENG II TOSARI, matriks ketercapaian kurikulum seluruh kelompok, dan ruang tanda tangan resmi Kepala Sekolah.
 - Laporan dapat diunduh dalam format PDF atau Excel.
 
 ---
@@ -141,7 +141,7 @@ Jika koneksi internet di sekolah terputus:
 ### 5.1 Manajemen Profil Sekolah
 - Masuk menggunakan akun `admin`.
 - Buka menu **Pengaturan Sekolah**.
-- Pastikan data NPSN (20519069), alamat sekolah di Dusun Sedaeng, Desa Kandangan, Kecamatan Tosari, nama Kepala Sekolah, dan NIP sudah sesuai data Dapodik terkini.
+- Pastikan data NPSN (20519069), alamat sekolah di Dusun Sedaeng, Desa Sedaeng, Kecamatan Tosari, nama Kepala Sekolah, dan NIP sudah sesuai data Dapodik terkini.
 
 ### 5.2 Manajemen Akun Guru
 - Buka menu **Manajemen Pengguna**.

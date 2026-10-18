@@ -30,7 +30,7 @@ export default async function GuruPage() {
             Data Guru &amp; Tenaga Pendidik
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Pengelolaan guru pengampu kelas rangkap (Kelompok A, B, C) SDN Kandangan I Tosari
+            Pengelolaan guru pengampu kelas rangkap (Kelompok A, B, C) SDN SEDAENG II TOSARI
           </p>
         </div>
         <div className="flex items-center gap-3">

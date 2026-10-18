@@ -10,9 +10,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Multigrade Cerdas AI - SDN Kandangan I Tosari",
+  title: "Multigrade Cerdas AI - SDN SEDAENG II TOSARI",
   description:
-    "Platform Pembelajaran Kelas Rangkap Berbasis AI & PWA Offline-First untuk SDN Kandangan I Tosari",
+    "Platform Pembelajaran Kelas Rangkap Berbasis AI & PWA Offline-First untuk SDN SEDAENG II TOSARI",
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-192.svg",

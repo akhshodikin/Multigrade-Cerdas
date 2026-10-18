@@ -186,7 +186,7 @@ export function OfflineSyncManagerView({ user }: OfflineSyncManagerViewProps) {
       } else {
         setMessage({
           type: "success",
-          text: `Semua ${syncedCount} data berhasil disinkronkan dan diverifikasi oleh server SDN Kandangan I!`,
+          text: `Semua ${syncedCount} data berhasil disinkronkan dan diverifikasi oleh server SDN SEDAENG II TOSARI!`,
         });
       }
     } catch (err: unknown) {
@@ -412,7 +412,7 @@ export function OfflineSyncManagerView({ user }: OfflineSyncManagerViewProps) {
                 Pusat Sinkronisasi & Mode Offline
               </h1>
               <p className="text-sm text-slate-500">
-                PWA & Penyimpanan Luring untuk Kondisi Blank Spot SDN Kandangan I Tosari
+                PWA & Penyimpanan Luring untuk Kondisi Blank Spot SDN SEDAENG II TOSARI
               </p>
             </div>
           </div>
@@ -510,7 +510,7 @@ export function OfflineSyncManagerView({ user }: OfflineSyncManagerViewProps) {
             <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-2 opacity-80" />
             <p className="font-semibold text-slate-700">Tidak ada antrean tertunda</p>
             <p className="text-xs text-slate-400 mt-1">
-              Semua perubahan jurnal, asesmen, atau modul ajar telah sinkron dengan server SDN Kandangan I.
+              Semua perubahan jurnal, asesmen, atau modul ajar telah sinkron dengan server SDN SEDAENG II TOSARI.
             </p>
           </div>
         ) : (

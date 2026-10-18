@@ -1,5 +1,5 @@
 # Checklist Keamanan & Audit Sistem Multigrade Cerdas AI
-**Sekolah:** SDN Kandangan I Tosari, Kec. Tosari, Kab. Pasuruan (NPSN: 20519069)  
+**Sekolah:** SDN SEDAENG II TOSARI, Kec. Tosari, Kab. Pasuruan (NPSN: 20519069)  
 **Dokumen:** Evaluasi & Verifikasi Keamanan Produksi  
 **Status Audit:** Terverifikasi (14/14 Area) — Dilengkapi Prosedur Hardening & Pemulihan  
 
@@ -17,7 +17,7 @@
 |:---|:---|:---:|:---|:---|
 | 1 | **Autentikasi & Manajemen Sesi** | ✅ AMAN | `src/lib/auth.ts`, `src/app/actions/auth.ts`, DB `sessions` | Cookie sesi `httpOnly`, `sameSite=lax`, token acak 64-karakter tersimpan di database dengan masa kedaluwarsa (7 hari), validasi bcrypt untuk kata sandi, pencatatan audit log saat login dan logout. |
 | 2 | **Otorisasi Berdasarkan Role (RBAC)** | ✅ AMAN | `src/lib/auth.ts`, `src/lib/reports/data-fetchers.ts`, `src/lib/offline/sync-processor.ts` | 3 Role ketat: **Admin** (konfigurasi & kelola pengguna), **Kepala Sekolah** (seluruh laporan, pemantauan supervisi), **Guru** (terisolasi hanya pada kelompok multigrade yang ditugaskan: Kelompok A, B, atau C). Upaya lintas kelompok diblokir di level server (HTTP 403 / Error). |
-| 3 | **Isolasi Akses Data Sekolah** | ✅ AMAN | `src/db/schema.ts`, `src/lib/reports/data-fetchers.ts` | Data resmi SDN Kandangan I Tosari (NPSN 20519069) tersimpan di database dan menjadi identitas tunggal setiap dokumen, modul ajar, dan laporan. Tidak ada data sekolah fiktif di lingkungan produksi. |
+| 3 | **Isolasi Akses Data Sekolah** | ✅ AMAN | `src/db/schema.ts`, `src/lib/reports/data-fetchers.ts` | Data resmi SDN SEDAENG II TOSARI (NPSN 20519069) tersimpan di database dan menjadi identitas tunggal setiap dokumen, modul ajar, dan laporan. Tidak ada data sekolah fiktif di lingkungan produksi. |
 | 4 | **Validasi Input di Server** | ✅ AMAN | Zod schemas di seluruh Server Actions (`src/app/actions/*`) | Validasi tipe data, panjang string, batas nilai numerik (skor 0–100), enumerasi fase/semester, dan struktur JSON dilakukan sebelum query database dieksekusi. Tidak mengandalkan validasi HTML sisi klien. |
 | 5 | **Keamanan Endpoint & Server Actions** | ✅ AMAN | `src/middleware.ts`, `requireAuth()` helper | Rute `/dashboard/*` diproteksi secara terpusat oleh Next.js Middleware. Server actions memvalidasi sesi aktif pengguna melalui `getSession()` sebelum melakukan mutasi data. |
 | 6 | **Perlindungan Kredensial & API Key** | ✅ AMAN | `.env.local`, `.gitignore`, `src/lib/ai/*` | Kunci `GEMINI_API_KEY` dan kredensial database tidak pernah dikirim ke browser client bundle. File `.env` dan `.env.local` terdaftar dalam `.gitignore` dan `.dockerignore`. |
@@ -35,6 +35,6 @@
 ## Prosedur Pra-Produksi Sekolah
 Sebelum memasukkan data siswa dan guru riil ke dalam sistem produksi:
 1. **Pemeriksaan Administrator:** Administrator sekolah wajib login dengan akun default `admin` dan segera mengganti kata sandi default.
-2. **Konfirmasi Identitas Sekolah:** Periksa halaman Pengaturan Profil Sekolah untuk memastikan NPSN, nama kepala sekolah, NIP, alamat, dan nomor kontak SDN Kandangan I Tosari sudah sesuai data Dapodik terbaru.
+2. **Konfirmasi Identitas Sekolah:** Periksa halaman Pengaturan Profil Sekolah untuk memastikan NPSN, nama kepala sekolah, NIP, alamat, dan nomor kontak SDN SEDAENG II TOSARI sudah sesuai data Dapodik terbaru.
 3. **Pembersihan Data Sintetis:** Sebelum menginput data riil siswa, jalankan skrip pembersihan atau reset data pengujian atas persetujuan tertulis Kepala Sekolah.
 4. **Verifikasi Backup Terjadwal:** Pastikan cron job backup telah aktif dan folder `backups/` dapat diakses serta memiliki kapasitas disk yang memadai.

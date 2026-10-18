@@ -30,7 +30,7 @@ export async function generateUsersXlsx(): Promise<Buffer> {
   };
 
   const rows: (string | number)[][] = [
-    [(school?.name || "SDN KANDANGAN I TOSARI").toUpperCase()],
+    [(school?.name || "SDN SEDAENG II TOSARI").toUpperCase()],
     [`NPSN: ${school?.npsn || "20519069"} | Alamat: ${school?.address || "Kec. Tosari, Kab. Pasuruan"}`],
     ["DATA GURU DAN TENAGA KEPENDIDIKAN (GTK)"],
     [`Waktu Unduh: ${new Date().toLocaleString("id-ID")} | Total Staf: ${usersList.length}`],
@@ -98,33 +98,33 @@ export async function generateUsersTemplateXlsx(): Promise<Buffer> {
     ],
     [
       "Agus Triyono, S.Pd.",
-      "guru.a@sdnkandangan1.sch.id",
+      "guru.a@sedaeng2.sch.id",
       "198603152010011008",
       "081234567891",
       "teacher",
       "group-a",
       "Aktif",
-      "Kandangan1#2024",
+      "Sedaeng2#Tosari",
     ],
     [
       "Dewi Lestari, S.Pd.",
-      "guru.b@sdnkandangan1.sch.id",
+      "guru.b@sedaeng2.sch.id",
       "199004122015022003",
       "081234567892",
       "teacher",
       "group-b",
       "Aktif",
-      "Kandangan1#2024",
+      "Sedaeng2#Tosari",
     ],
     [
       "Bambang Sutrisno, S.Pd., M.Pd.",
-      "kepsek@sdnkandangan1.sch.id",
+      "kepsek@sedaeng2.sch.id",
       "197508122000031002",
       "081234567890",
       "headmaster",
       "-",
       "Aktif",
-      "Kandangan1#2024",
+      "Sedaeng2#Tosari",
     ],
   ];
 
@@ -143,7 +143,7 @@ export async function generateUsersTemplateXlsx(): Promise<Buffer> {
 
   const guideRows = [
     ["PANDUAN PENGISIAN DATA GURU DAN TENAGA KEPENDIDIKAN (XLSX)"],
-    ["SDN KANDANGAN I TOSARI"],
+    ["SDN SEDAENG II TOSARI"],
     ["=========================================================================================="],
     [],
     ["1. Kolom 'Nama Lengkap' (Wajib):", "Nama lengkap dan gelar pendidik / tenaga kependidikan."],

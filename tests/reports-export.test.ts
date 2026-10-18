@@ -57,12 +57,12 @@ describe("Pengujian Modul Laporan dan Ekspor Multigrade Cerdas AI", () => {
     } as any;
   });
 
-  // 1. Identitas Resmi Sekolah SDN Kandangan I Tosari
-  it("harus menggunakan identitas resmi SDN Kandangan I Tosari dari database", async () => {
+  // 1. Identitas Resmi Sekolah SDN SEDAENG II TOSARI
+  it("harus menggunakan identitas resmi SDN SEDAENG II TOSARI dari database", async () => {
     const school = await getOfficialSchoolHeader();
-    expect(school.name).toContain("SDN Kandangan I Tosari");
+    expect(school.name).toMatch(/SDN SEDAENG II/i);
     expect(school.npsn).toBe("20519069");
-    expect(school.address).toContain("Kandangan");
+    expect(school.address).toContain("Sedaeng");
     expect(school.address).toContain("Tosari");
     expect(school.headmasterName).toBeDefined();
     expect(school.activeAcademicYear).toBeDefined();
@@ -73,7 +73,7 @@ describe("Pengujian Modul Laporan dan Ekspor Multigrade Cerdas AI", () => {
     // 1. ATP Multigrade
     const atpData = await fetchAtpReportData({ groupId: "group-a" });
     expect(atpData.reportType).toBe("atp_multigrade");
-    expect(atpData.school.name).toContain("SDN Kandangan I Tosari");
+    expect(atpData.school.name).toMatch(/SDN SEDAENG II/i);
     expect(atpData.items.length).toBeGreaterThan(0);
     expect(atpData.signature.headmasterName).toBeDefined();
 

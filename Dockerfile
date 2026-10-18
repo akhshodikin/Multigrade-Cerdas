@@ -51,7 +51,7 @@ USER nextjs
 
 EXPOSE 3005
 
-# Healthcheck targeting SDN Kandangan I health probe endpoint
+# Healthcheck targeting SDN SEDAENG II TOSARI health probe endpoint
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD curl -f http://localhost:3005/api/health || exit 1
 

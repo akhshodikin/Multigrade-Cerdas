@@ -1,4 +1,4 @@
-# Multigrade Cerdas AI — SDN Kandangan I Tosari
+# Multigrade Cerdas AI — SDN SEDAENG II TOSARI
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.1-black.svg)](https://nextjs.org/)
@@ -6,9 +6,9 @@
 [![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-0.38-green.svg)](https://orm.drizzle.team/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-PGlite_WASM-336791.svg)](https://github.com/electric-sql/pglite)
 [![Gemini AI](https://img.shields.io/badge/Google_Gemini-2.30-orange.svg)](https://ai.google.dev/)
-[![Tests](https://img.shields.io/badge/Vitest-110%2F110_Passed-brightgreen.svg)](https://vitest.dev/)
+[![Tests](https://img.shields.io/badge/Vitest-119%2F119_Passed-brightgreen.svg)](https://vitest.dev/)
 
-**Multigrade Cerdas AI** adalah sistem terpadu perencanaan, pelaksanaan, asesmen, dan pelaporan pembelajaran kelas rangkap (*multigrade teaching*) berbasis kecerdasan buatan terkurasi untuk **SDN Kandangan I Tosari** (NPSN: 20519069), Kecamatan Tosari, Kabupaten Pasuruan, Jawa Timur.
+**Multigrade Cerdas AI** adalah sistem terpadu perencanaan, pelaksanaan, asesmen, dan pelaporan pembelajaran kelas rangkap (*multigrade teaching*) berbasis kecerdasan buatan terkurasi untuk **SDN SEDAENG II TOSARI** (NPSN: 20519069), Kecamatan Tosari, Kabupaten Pasuruan, Jawa Timur.
 
 Sistem dirancang secara khusus untuk mengatasi tantangan unik sekolah di daerah lereng Gunung Bromo dengan keterbatasan guru dan koneksi internet yang fluktuatif, memungkinkan guru menyusun perangkat ajar berdiferensiasi dan melakukan pencatatan asesmen baik secara **online** maupun **offline-first**.
 
@@ -16,7 +16,7 @@ Sistem dirancang secara khusus untuk mengatasi tantangan unik sekolah di daerah 
 
 ## 🏛️ Struktur Kelompok Kelas Multigrade
 
-Pembelajaran di SDN Kandangan I Tosari diorganisasikan ke dalam 3 kelompok kelas rangkap:
+Pembelajaran di SDN SEDAENG II TOSARI diorganisasikan ke dalam 3 kelompok kelas rangkap:
 - **Kelompok A:** Kelas 1 dan Kelas 2 (Fase A)
 - **Kelompok B:** Kelas 3 dan Kelas 4 (Fase B)
 - **Kelompok C:** Kelas 5 dan Kelas 6 (Fase C)
@@ -50,7 +50,7 @@ Setiap kelompok diajar oleh guru kelas yang berfokus mendampingi siswa dengan mo
 7. **Jurnal Mengajar Harian:**
    - Pencatatan kehadiran siswa, pelaksanaan rotasi waktu, dan refleksi guru.
 8. **Laporan Resmi & Ekspor Terintegrasi:**
-   - 10 jenis dokumen resmi berformat A4 dengan kop resmi SDN Kandangan I Tosari.
+   - 10 jenis dokumen resmi berformat A4 dengan kop resmi SDN SEDAENG II TOSARI.
    - Ekspor dalam format PDF, DOCX, dan Microsoft Excel (XLSX).
 9. **Kemampuan Offline-First (PWA & IndexedDB):**
    - Tetap dapat digunakan saat koneksi internet terputus.
@@ -90,7 +90,7 @@ PORT=3005
 ```
 
 ### 3. Inisialisasi Database
-Terapkan skema tabel dan isi data awal resmi SDN Kandangan I Tosari beserta 27 data siswa sintetis pengujian:
+Terapkan skema tabel dan isi data awal resmi SDN SEDAENG II TOSARI beserta 27 data siswa sintetis pengujian:
 ```bash
 npm run db:push
 npm run db:seed

@@ -8,7 +8,7 @@ import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 
-describe("Pengujian Pencadangan & Pemulihan Database Multigrade Cerdas AI (SDN Kandangan I Tosari)", () => {
+describe("Pengujian Pencadangan & Pemulihan Database Multigrade Cerdas AI (SDN SEDAENG II TOSARI)", () => {
   let createdBackupPath: string;
   let createdChecksumPath: string;
 
@@ -29,7 +29,7 @@ describe("Pengujian Pencadangan & Pemulihan Database Multigrade Cerdas AI (SDN K
     const parsed = JSON.parse(rawContent);
 
     expect(parsed.version).toBe(1);
-    expect(parsed.schoolName).toBe("SDN Kandangan I Tosari");
+    expect(parsed.schoolName).toBe("SDN SEDAENG II TOSARI");
     expect(parsed.npsn).toBe("20519069");
     expect(parsed.tables).toBeDefined();
     expect(parsed.tables.students.length).toBeGreaterThan(0);

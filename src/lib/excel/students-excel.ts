@@ -40,7 +40,7 @@ export async function generateStudentsXlsx(filter?: { classId?: number; groupId?
   };
 
   const rows: (string | number)[][] = [
-    [(school?.name || "SDN KANDANGAN I TOSARI").toUpperCase()],
+    [(school?.name || "SDN SEDAENG II TOSARI").toUpperCase()],
     [`NPSN: ${school?.npsn || "20519069"} | Alamat: ${school?.address || "Kec. Tosari, Kab. Pasuruan"}`],
     ["DATA INDUK SISWA PEMBELAJARAN MULTIGRADE / KELAS RANGKAP"],
     [`Waktu Unduh: ${new Date().toLocaleString("id-ID")} | Total Siswa: ${filtered.length}`],
@@ -166,7 +166,7 @@ export async function generateStudentsTemplateXlsx(): Promise<Buffer> {
 
   const guideRows = [
     ["PANDUAN PENGISIAN DATA SISWA DALAM FORMAT EXCEL (XLSX)"],
-    ["SDN KANDANGAN I TOSARI - PEMBELAJARAN MULTIGRADE"],
+    ["SDN SEDAENG II TOSARI - PEMBELAJARAN MULTIGRADE"],
     ["=========================================================================================="],
     [],
     ["1. Kolom 'Kode Siswa' (Wajib):", "Kode unik siswa. Jika kode sudah ada di sistem, data akan diperbarui (update). Jika baru, data akan ditambahkan."],

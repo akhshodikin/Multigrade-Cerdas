@@ -26,7 +26,7 @@ export async function GET() {
     });
 
     const timestamp = new Date().toISOString().split("T")[0];
-    const filename = `data-guru-gtk-sdn-kandangan-1-${timestamp}.xlsx`;
+    const filename = `data-guru-gtk-sdn-sedaeng-2-${timestamp}.xlsx`;
 
     return new NextResponse(new Uint8Array(xlsxBuffer), {
       status: 200,

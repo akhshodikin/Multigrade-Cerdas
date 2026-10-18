@@ -92,7 +92,7 @@ export function UserExcelActions({ isAdmin }: UserExcelActionsProps) {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Unggah Data Guru &amp; GTK (Excel .xlsx)</h3>
-                  <p className="text-[11px] text-slate-500">Impor massal akun pendidik dan staf SDN Kandangan I Tosari</p>
+                  <p className="text-[11px] text-slate-500">Impor massal akun pendidik dan staf SDN SEDAENG II TOSARI</p>
                 </div>
               </div>
               <button

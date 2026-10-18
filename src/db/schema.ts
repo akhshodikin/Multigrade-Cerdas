@@ -1,15 +1,15 @@
 import { pgTable, text, timestamp, uuid, integer, boolean, jsonb } from "drizzle-orm/pg-core";
 
-// 1. Profil Sekolah (SDN Kandangan I Tosari - Singleton Entity, dapat diatur administrator)
+// 1. Profil Sekolah (SDN SEDAENG II TOSARI - Singleton Entity, dapat diatur administrator)
 export const schoolProfile = pgTable("school_profile", {
   id: integer("id").primaryKey(), // ID 1 (Singleton)
   npsn: text("npsn").notNull().default("20519069"),
-  name: text("name").notNull().default("SDN Kandangan I Tosari"),
-  address: text("address").notNull().default("Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177"),
+  name: text("name").notNull().default("SDN SEDAENG II TOSARI"),
+  address: text("address").notNull().default("Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177"),
   headmasterName: text("headmaster_name").notNull().default("Bambang Sutrisno, S.Pd., M.Pd."),
   headmasterNip: text("headmaster_nip").default("197508122000031002"),
   phone: text("phone").default("081234567890"),
-  email: text("email").default("sdnkandangan1tosari@gmail.com"),
+  email: text("email").default("sdnsedaeng2tosari@gmail.com"),
   activeAcademicYear: text("active_academic_year").notNull().default("2024/2025"),
   activeSemester: text("active_semester").notNull().default("Ganjil"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),

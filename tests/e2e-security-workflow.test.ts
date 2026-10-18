@@ -8,7 +8,7 @@ import { fetchStudentProgressReportData } from "@/lib/reports/data-fetchers";
 import { recordStudentResults } from "@/lib/assessment/engine";
 import { importCurriculumSourceAction } from "@/app/actions/curriculum";
 
-describe("Pengujian End-to-End Alur Inti & Keamanan RBAC Multigrade Cerdas AI (SDN Kandangan I Tosari)", () => {
+describe("Pengujian End-to-End Alur Inti & Keamanan RBAC Multigrade Cerdas AI (SDN SEDAENG II TOSARI)", () => {
   let adminUser: typeof schema.users.$inferSelect;
   let headmasterUser: typeof schema.users.$inferSelect;
   let teacherUserA: typeof schema.users.$inferSelect;

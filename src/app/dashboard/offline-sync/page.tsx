@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Pusat Sinkronisasi & Mode Offline - Multigrade Cerdas AI",
   description:
-    "Pusat manajemen sinkronisasi data luring (offline-first), deteksi konflik, dan cadangan darurat SDN Kandangan I Tosari.",
+    "Pusat manajemen sinkronisasi data luring (offline-first), deteksi konflik, dan cadangan darurat SDN SEDAENG II TOSARI.",
 };
 
 export default async function OfflineSyncPage() {

@@ -1,6 +1,6 @@
 # Panduan Pencadangan & Pemulihan Database (Backup & Restore)
 **Aplikasi:** Multigrade Cerdas AI  
-**Sekolah:** SDN Kandangan I Tosari, Kec. Tosari, Kab. Pasuruan  
+**Sekolah:** SDN SEDAENG II TOSARI, Kec. Tosari, Kab. Pasuruan  
 **Mesin Database:** Embedded PostgreSQL (PGlite) & PostgreSQL Kompatibel  
 
 ---

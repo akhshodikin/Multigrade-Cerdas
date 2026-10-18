@@ -34,7 +34,7 @@ const borderThin = {
 export async function generateReportDocx(data: AnyReportData): Promise<Buffer> {
   const children: (Paragraph | Table)[] = [];
 
-  // 1. KOP Resmi Sekolah SDN Kandangan I Tosari
+  // 1. KOP Resmi Sekolah SDN SEDAENG II TOSARI
   children.push(
     new Paragraph({
       alignment: AlignmentType.CENTER,

@@ -22,7 +22,7 @@ import {
 import { processSyncBatchOnServer } from "@/lib/offline/sync-processor";
 import type { OutboxItem, CachedMaterial, CachedStudent } from "@/lib/offline/types";
 
-describe("Pengujian Mode Offline-First & Sinkronisasi Multigrade Cerdas AI (SDN Kandangan I Tosari)", () => {
+describe("Pengujian Mode Offline-First & Sinkronisasi Multigrade Cerdas AI (SDN SEDAENG II TOSARI)", () => {
   let teacherUserA: typeof schema.users.$inferSelect;
   let teacherUserB: typeof schema.users.$inferSelect;
   let sampleGroupA: typeof schema.multigradeGroups.$inferSelect;
@@ -373,8 +373,8 @@ describe("Pengujian Mode Offline-First & Sinkronisasi Multigrade Cerdas AI (SDN 
     });
 
     // 1. Ekspor dump
-    const backupDump = await exportEmergencyBackup(teacherUserB.id, "SDN Kandangan I Tosari");
-    expect(backupDump.schoolName).toBe("SDN Kandangan I Tosari");
+    const backupDump = await exportEmergencyBackup(teacherUserB.id, "SDN SEDAENG II TOSARI");
+    expect(backupDump.schoolName).toBe("SDN SEDAENG II TOSARI");
     expect(backupDump.userId).toBe(teacherUserB.id);
     expect(backupDump.outboxItems.some((i) => i.id === dumpItem.id)).toBe(true);
 

@@ -14,7 +14,7 @@ export async function GET() {
     }
 
     const xlsxBuffer = await generateUsersTemplateXlsx();
-    const filename = `template-impor-guru-gtk-sdn-kandangan-1.xlsx`;
+    const filename = `template-impor-guru-gtk-sdn-sedaeng-2.xlsx`;
 
     return new NextResponse(new Uint8Array(xlsxBuffer), {
       status: 200,

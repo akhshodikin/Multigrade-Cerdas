@@ -9,7 +9,7 @@ describe("Pengujian Profil Sekolah, Semester, & Kelompok Multigrade", () => {
     const profile = await db.select().from(schema.schoolProfile).where(eq(schema.schoolProfile.id, 1));
     expect(profile.length).toBe(1);
     expect(profile[0].npsn).toMatch(/^20519/);
-    expect(profile[0].name.toLowerCase()).toMatch(/sdn (sedaeng ii|kandangan i) tosari/i);
+    expect(profile[0].name.toLowerCase()).toBe("sdn sedaeng ii tosari");
     expect(profile[0].address).toContain("Tosari");
   });
 

@@ -15,7 +15,7 @@ export async function generateReportPdf(data: AnyReportData): Promise<Buffer> {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
-  // 1. KOP Resmi Sekolah SDN Kandangan I Tosari
+  // 1. KOP Resmi Sekolah SDN SEDAENG II TOSARI
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.text("PEMERINTAH KABUPATEN PASURUAN", pageWidth / 2, 14, { align: "center" });

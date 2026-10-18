@@ -104,7 +104,7 @@ export function StudentExcelActions({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Unggah Data Siswa (Excel .xlsx)</h3>
-                  <p className="text-[11px] text-slate-500">Impor massal data siswa SDN Kandangan I Tosari</p>
+                  <p className="text-[11px] text-slate-500">Impor massal data siswa SDN SEDAENG II TOSARI</p>
                 </div>
               </div>
               <button

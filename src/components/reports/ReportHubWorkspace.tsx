@@ -401,7 +401,7 @@ export function ReportHubWorkspace({
       {viewMode === "preview" && (
         /* Kertas A4 Simulasi Layar (Print Friendly Layout) */
         <div className="bg-white border border-slate-300 shadow-lg rounded-xl max-w-4xl mx-auto p-8 sm:p-12 text-slate-900 print:border-none print:shadow-none print:p-0 print:max-w-none">
-          {/* KOP Surat Resmi SDN Kandangan I Tosari */}
+          {/* KOP Surat Resmi SDN SEDAENG II TOSARI */}
           <div className="text-center pb-4 border-b-2 border-black space-y-1">
             <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-800">
               Pemerintah Kabupaten Pasuruan &bull; Dinas Pendidikan dan Kebudayaan

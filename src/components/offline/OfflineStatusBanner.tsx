@@ -170,7 +170,7 @@ export function OfflineStatusBanner({ user }: OfflineStatusBannerProps) {
                 </span>
               </div>
               <p className="text-xs text-amber-800 mt-0.5">
-                SDN Kandangan I Tosari: Anda dapat terus mencatat jurnal dan asesmen. Perubahan akan
+                SDN SEDAENG II TOSARI: Anda dapat terus mencatat jurnal dan asesmen. Perubahan akan
                 disimpan lokal dan otomatis disinkronkan saat terhubung kembali.
               </p>
             </div>
@@ -206,7 +206,7 @@ export function OfflineStatusBanner({ user }: OfflineStatusBannerProps) {
                 </span>
               </div>
               <p className="text-xs text-blue-800 mt-0.5">
-                Terdapat data jurnal atau asesmen lokal yang belum disinkronkan ke server SDN Kandangan I.
+                Terdapat data jurnal atau asesmen lokal yang belum disinkronkan ke server SDN SEDAENG II TOSARI.
               </p>
             </div>
           </div>

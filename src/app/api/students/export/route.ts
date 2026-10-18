@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     });
 
     const timestamp = new Date().toISOString().split("T")[0];
-    const filename = `data-siswa-sdn-kandangan-1-${timestamp}.xlsx`;
+    const filename = `data-siswa-sdn-sedaeng-2-${timestamp}.xlsx`;
 
     return new NextResponse(new Uint8Array(xlsxBuffer), {
       status: 200,

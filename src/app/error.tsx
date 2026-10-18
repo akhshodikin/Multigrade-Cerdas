@@ -28,7 +28,7 @@ export default function GlobalErrorPage({
             Terjadi Kendala Teknis
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
-            Sistem Multigrade Cerdas AI SDN Kandangan I Tosari mengalami kendala saat memproses permintaan ini. Data penting Anda tetap aman tersimpan.
+            Sistem Multigrade Cerdas AI SDN SEDAENG II TOSARI mengalami kendala saat memproses permintaan ini. Data penting Anda tetap aman tersimpan.
           </p>
         </div>
 

@@ -204,7 +204,7 @@ describe("Pengujian Generator Modul Ajar Multigrade Cerdas AI SDN Sedaeng II Tos
     expect(objGrade1?.competency).not.toBe(objGrade2?.competency);
 
     // Identitas Sekolah Resmi
-    expect(draft.schoolInfo.name).toMatch(/SDN (SEDAENG II|Kandangan I)/i);
+    expect(draft.schoolInfo.name).toBe("SDN SEDAENG II TOSARI");
     expect(draft.schoolInfo.npsn).toMatch(/^20519/);
     expect(draft.schoolInfo.address).toContain("Tosari");
   });

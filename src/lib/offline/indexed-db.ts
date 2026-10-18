@@ -368,7 +368,7 @@ export async function clearUserCache(userId: string): Promise<void> {
  */
 export async function exportEmergencyBackup(
   userId: string,
-  schoolName: string = "SDN Kandangan I Tosari"
+  schoolName: string = "SDN SEDAENG II TOSARI"
 ): Promise<EmergencyBackupDump> {
   const outbox = await getPendingOutboxItems(userId);
   const materials = await getCachedMaterials();

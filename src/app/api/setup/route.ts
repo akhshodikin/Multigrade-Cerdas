@@ -14,7 +14,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: "Database Multigrade Cerdas AI berhasil diinisialisasi dan diisi dengan data awal SDN Kandangan I Tosari!",
+      message: "Database Multigrade Cerdas AI berhasil diinisialisasi dan diisi dengan data awal SDN SEDAENG II TOSARI!",
       accounts: [
         { role: "admin", email: "admin@sedaeng2.sch.id", defaultPassword: "Sedaeng2#Tosari" },
         { role: "headmaster", email: "kepsek@sedaeng2.sch.id", defaultPassword: "Sedaeng2#Tosari" },

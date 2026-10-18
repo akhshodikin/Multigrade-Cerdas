@@ -10,7 +10,7 @@ export async function GET() {
     }
 
     const xlsxBuffer = await generateStudentsTemplateXlsx();
-    const filename = `template-impor-siswa-sdn-kandangan-1.xlsx`;
+    const filename = `template-impor-siswa-sdn-sedaeng-2.xlsx`;
 
     return new NextResponse(new Uint8Array(xlsxBuffer), {
       status: 200,

@@ -1,6 +1,6 @@
 # Konfigurasi Caddy Reverse Proxy dengan HTTPS Otomatis
-# Ganti multigrade.sdnkandangan1.sch.id dengan domain sekolah Anda.
-multigrade.sdnkandangan1.sch.id {
+# Ganti multigrade.sdnsedaeng2.sch.id dengan domain sekolah Anda.
+multigrade.sdnsedaeng2.sch.id {
     reverse_proxy app:3005
 
     # Security headers

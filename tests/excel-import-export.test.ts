@@ -14,7 +14,7 @@ import {
   parseUsersXlsx,
 } from "@/lib/excel/users-excel";
 
-describe("Pengujian Modul Download & Upload XLSX Data Siswa dan Guru (SDN Kandangan I Tosari)", () => {
+describe("Pengujian Modul Download & Upload XLSX Data Siswa dan Guru (SDN SEDAENG II TOSARI)", () => {
   // 1. Verifikasi Ekspor Data Siswa ke XLSX
   it("1. harus menghasilkan berkas XLSX data siswa dengan format biner dan struktur tabel yang benar", async () => {
     const buffer = await generateStudentsXlsx();

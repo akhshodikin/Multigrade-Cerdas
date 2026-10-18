@@ -11,7 +11,7 @@ export async function GET() {
       status: "healthy",
       timestamp: new Date().toISOString(),
       service: "multigrade-cerdas-ai",
-      school: school?.name || "SDN Kandangan I Tosari",
+      school: school?.name || "SDN SEDAENG II TOSARI",
       npsn: school?.npsn || "20519069",
       uptime: process.uptime(),
     }, { status: 200 });

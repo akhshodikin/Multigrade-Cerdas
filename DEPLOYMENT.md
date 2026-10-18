@@ -1,6 +1,6 @@
 # Panduan Deployment Produksi (Deployment Guide)
 **Aplikasi:** Multigrade Cerdas AI  
-**Sekolah:** SDN Kandangan I Tosari, Kec. Tosari, Kab. Pasuruan  
+**Sekolah:** SDN SEDAENG II TOSARI, Kec. Tosari, Kab. Pasuruan  
 **Target Lingkungan:** Cloud VPS (Ubuntu/Debian) atau Mini Server Sekolah (On-Premise)  
 
 ---
@@ -30,7 +30,7 @@ Sesuaikan konfigurasi environment produksi:
 # Environment
 NODE_ENV=production
 PORT=3005
-NEXT_PUBLIC_APP_URL=https://multigrade.sdnkandangan1.sch.id
+NEXT_PUBLIC_APP_URL=https://multigrade.sdnsedaeng2.sch.id
 
 # Google AI Studio API Key (Wajib diisi untuk generasi cerdas)
 GEMINI_API_KEY=AIzaSy...KunciRahasiaAnda...
@@ -69,7 +69,7 @@ Respons yang diharapkan:
 {
   "status": "healthy",
   "service": "multigrade-cerdas-ai",
-  "school": "SDN Kandangan I Tosari",
+  "school": "SDN SEDAENG II TOSARI",
   "npsn": "20519069"
 }
 ```
@@ -81,7 +81,7 @@ Respons yang diharapkan:
 Untuk mengamankan lalu lintas data dengan sertifikat SSL/TLS gratis (Let's Encrypt), gunakan Caddy server:
 
 1. Buat DNS Record A di penyedia domain Anda:
-   `multigrade.sdnkandangan1.sch.id` -> `[IP-PUBLIC-SERVER-ANDA]`
+   `multigrade.sdnsedaeng2.sch.id` -> `[IP-PUBLIC-SERVER-ANDA]`
 2. Aktifkan service `caddy` di file `docker-compose.yml` dengan menghapus tanda komentar `#`.
 3. Pastikan port 80 dan 443 dibuka di firewall server:
    ```bash

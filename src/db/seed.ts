@@ -12,22 +12,22 @@ export async function runSeed() {
     await db.insert(schema.schoolProfile).values({
       id: 1,
       npsn: "20519069",
-      name: "SDN Kandangan I Tosari",
-      address: "Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
+      name: "SDN SEDAENG II TOSARI",
+      address: "Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
       headmasterName: "Bambang Sutrisno, S.Pd., M.Pd.",
       headmasterNip: "197508122000031002",
       phone: "081234567890",
-      email: "sdnkandangan1tosari@gmail.com",
+      email: "sdnsedaeng2tosari@gmail.com",
       activeAcademicYear: "2024/2025",
       activeSemester: "Ganjil",
     });
-    console.log("✓ Profil SDN Kandangan I Tosari tersimpan.");
+    console.log("✓ Profil SDN SEDAENG II TOSARI tersimpan.");
   } else {
     await db.update(schema.schoolProfile).set({
-      name: "SDN Kandangan I Tosari",
+      name: "SDN SEDAENG II TOSARI",
       npsn: "20519069",
-      address: "Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
-      email: "sdnkandangan1tosari@gmail.com",
+      address: "Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
+      email: "sdnsedaeng2tosari@gmail.com",
     }).where(eq(schema.schoolProfile.id, 1));
   }
 
@@ -471,6 +471,72 @@ export async function runSeed() {
     console.log("✓ Tujuan Pembelajaran (TP) & Alur Tujuan Pembelajaran (ATP) terpadu tersimpan.");
   }
 
+  // 11. Peta Irisan Materi Multigrade Awal (Kelompok A)
+  const existingMaps = await db.select().from(schema.multigradeMaterialMaps);
+  if (existingMaps.length === 0) {
+    const teacherA = await db.query.users.findFirst({ where: eq(schema.users.assignedGroupId, "group-a") });
+    const kepsekUser = await db.query.users.findFirst({ where: eq(schema.users.role, "headmaster") });
+
+    await db.insert(schema.multigradeMaterialMaps).values({
+      groupId: "group-a",
+      subjectId: "matematika",
+      academicYear: "2024/2025",
+      semester: "Ganjil",
+      durationMinutes: 70,
+      sharedTheme: "Pertanian & Perhitungan Hasil Panen Lereng Pegunungan Bromo",
+      studentConditions: "Siswa kelas 1 perlu manipulasi benda konkret, kelas 2 siap operasi penjumlahan bilangan puluhan.",
+      mappingStrategy: "terpadu_sebagian",
+      aiProvider: "gemini",
+      aiModel: "gemini-2.5-flash",
+      confidenceLevel: "tinggi",
+      confidenceScore: 92,
+      confidenceDisclaimer: "Rekomendasi irisan materi telah divalidasi dengan Capaian Pembelajaran resmi BSKAP No. 032/H/KR/2024.",
+      structuredOutput: {
+        sharedTheme: "Pertanian & Perhitungan Hasil Panen Lereng Pegunungan Bromo",
+        mappingStrategy: "terpadu_sebagian",
+        lowerGradeTps: [{ code: "TP-MAT-1.1", description: "Membilang dan menyusun banyak benda konkret 1 sampai dengan 20" }],
+        higherGradeTps: [{ code: "TP-MAT-2.1", description: "Menentukan nilai tempat puluhan dan satuan bilangan cacah sampai 100" }],
+        unifiedTps: ["Menghitung komoditas sayur lereng Bromo bersama"],
+        separatedTps: ["Manipulasi konkret kelas 1 vs latihan mandiri nilai tempat kelas 2"],
+        rotationActivityPlan: [
+          {
+            stepNumber: 1,
+            stepName: "Apersepsi Bersama",
+            durationMinutes: 15,
+            lowerGradeActivity: "Mengamati gambar komoditas sayur lereng Bromo bersama",
+            higherGradeActivity: "Mengamati gambar komoditas sayur lereng Bromo bersama",
+          },
+          {
+            stepNumber: 2,
+            stepName: "Bimbingan Langsung Kelas 1",
+            durationMinutes: 25,
+            lowerGradeActivity: "Manipulasi kartu hitung konkret dengan pendampingan guru",
+            higherGradeActivity: "Eksplorasi mandiri pemecahan masalah pada LKPD berjenjang",
+          },
+          {
+            stepNumber: 3,
+            stepName: "Bimbingan Langsung Kelas 2",
+            durationMinutes: 20,
+            lowerGradeActivity: "Latihan berpasangan dengan tutor sebaya",
+            higherGradeActivity: "Diskusi konsep penalaran dengan fasilitasi guru",
+          },
+          {
+            stepNumber: 4,
+            stepName: "Refleksi & Penutup",
+            durationMinutes: 10,
+            lowerGradeActivity: "Menyimpulkan hasil belajar bersama",
+            higherGradeActivity: "Menyimpulkan hasil belajar bersama",
+          },
+        ],
+      },
+      status: "approved",
+      createdById: teacherA?.id,
+      approvedById: kepsekUser?.id,
+      approvedAt: new Date(),
+    });
+    console.log("✓ Peta irisan materi pembelajaran multigrade awal tersimpan.");
+  }
+
   // 13. Jurnal Mengajar Kelas Rangkap Awal
   const existingJournals = await db.select().from(schema.teachingJournals);
   if (existingJournals.length === 0) {
@@ -521,7 +587,7 @@ export async function runSeed() {
         attendanceAbsent: 0,
         learningEvidenceSummary: "Karya gambar struktur tumbuhan Kelas 3 sangat detail; Kelas 4 mampu menjelaskan fungsi klorofil dengan contoh nyata di lereng Bromo.",
         challengesEncountered: "Udara berkabut dingin di pagi hari, kegiatan observasi luar kelas disesuaikan 15 menit.",
-        teacherReflection: "Siswa sangat antusias belajar langsung dari alam lingkungan Kandangan Tosari.",
+        teacherReflection: "Siswa sangat antusias belajar langsung dari alam lingkungan Sedaeng Tosari.",
         nextActionPlan: "Presentasi kelompok silang kelas 3 dan 4 pada pertemuan berikutnya.",
         teacherId: teacherB?.id,
         teacherName: teacherB?.name || "Joko Prasetyo, S.Pd.",

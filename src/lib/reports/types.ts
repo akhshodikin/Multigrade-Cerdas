@@ -32,7 +32,7 @@ export interface OfficialSchoolHeader {
 export interface ReportSignatureBlock {
   location: string; // e.g. "Tosari"
   dateFormatted: string; // e.g. "16 Oktober 2026"
-  headmasterTitle: string; // "Kepala SDN Kandangan I Tosari"
+  headmasterTitle: string; // "Kepala SDN SEDAENG II TOSARI"
   headmasterName: string;
   headmasterNip: string;
   teacherTitle: string; // "Guru Pengampu Kelas Rangkap"

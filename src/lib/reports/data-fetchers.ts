@@ -28,19 +28,19 @@ export function formatIndonesianDate(d: Date = new Date()): string {
 }
 
 /**
- * Mengambil KOP Resmi Sekolah SDN Kandangan I Tosari secara dinamis dari database
+ * Mengambil KOP Resmi Sekolah SDN SEDAENG II TOSARI secara dinamis dari database
  */
 export async function getOfficialSchoolHeader(): Promise<OfficialSchoolHeader> {
   const profile = await db.query.schoolProfile.findFirst();
 
   return {
-    name: profile?.name || "SDN Kandangan I Tosari",
+    name: profile?.name || "SDN SEDAENG II TOSARI",
     npsn: profile?.npsn || "20519069",
     address:
       profile?.address ||
-      "Dusun Kandangan, Desa Kandangan, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
+      "Dusun Sedaeng, Desa Sedaeng, Kec. Tosari, Kab. Pasuruan, Jawa Timur 67177",
     phone: profile?.phone || "081234567890",
-    email: profile?.email || "sdnkandangan1tosari@gmail.com",
+    email: profile?.email || "sdnsedaeng2tosari@gmail.com",
     headmasterName: profile?.headmasterName || "Bambang Sutrisno, S.Pd., M.Pd.",
     headmasterNip: profile?.headmasterNip || "197508122000031002",
     activeAcademicYear: profile?.activeAcademicYear || "2024/2025",
@@ -469,14 +469,14 @@ export async function fetchTeachingJournalReportData(params: {
   return {
     reportType: "jurnal_mengajar",
     title: `Jurnal Pelaksanaan Pembelajaran Kelas Rangkap (Multigrade)`,
-    subtitle: `Rekap Log Mengajar Harian SDN Kandangan I Tosari`,
+    subtitle: `Rekap Log Mengajar Harian SDN SEDAENG II TOSARI`,
     school,
     signature,
     journals: formattedJournals,
     metadata: {
       academicYear: school.activeAcademicYear,
       semester: school.activeSemester,
-      curriculumSource: "Log Harian Rotasi Multigrade Guru SDN Kandangan I Tosari",
+      curriculumSource: "Log Harian Rotasi Multigrade Guru SDN SEDAENG II TOSARI",
       generatedAt: formatIndonesianDate(),
       generatedBy: "Sistem Multigrade Cerdas AI",
       version: 1,
@@ -553,7 +553,7 @@ export async function fetchAssessmentRecapReportData(params: {
   return {
     reportType: "rekap_asesmen",
     title: `Rekapitulasi Penilaian & Asesmen Pembelajaran Multigrade`,
-    subtitle: `Hasil Asesmen Diagnostik, Formatif, dan Sumatif SDN Kandangan I Tosari`,
+    subtitle: `Hasil Asesmen Diagnostik, Formatif, dan Sumatif SDN SEDAENG II TOSARI`,
     school,
     signature,
     sessions,
@@ -690,7 +690,7 @@ export async function fetchStudentProgressReportData(
       grades: `Kelas ${student.classId}`,
       academicYear: school.activeAcademicYear,
       semester: school.activeSemester,
-      curriculumSource: "Kompilasi Observasi Portofolio Berkelanjutan SDN Kandangan I Tosari",
+      curriculumSource: "Kompilasi Observasi Portofolio Berkelanjutan SDN SEDAENG II TOSARI",
       generatedAt: formatIndonesianDate(),
       generatedBy: currentUser.role === "teacher" ? "Guru Pengampu" : "Kepala Sekolah",
       version: 1,
@@ -746,7 +746,7 @@ export async function fetchTpCoverageReportData(params: {
   return {
     reportType: "ketercapaian_tp",
     title: `Rekapitulasi Ketercapaian Tujuan Pembelajaran (TP)`,
-    subtitle: `Audit Cakupan Penguasaan TP Fase A, B, dan C SDN Kandangan I Tosari`,
+    subtitle: `Audit Cakupan Penguasaan TP Fase A, B, dan C SDN SEDAENG II TOSARI`,
     school,
     signature,
     tpStats,
@@ -912,7 +912,7 @@ export async function fetchPrincipalExecutiveSummaryData(params?: {
   ];
 
   const headmasterEndorsementStatement =
-    "Berdasarkan supervisi terpadu dan verifikasi dokumen kurikulum, proses pembelajaran kelas rangkap (multigrade) di SDN Kandangan I Tosari telah memenuhi standar Kurikulum Merdeka dan kaidah pedagogis yang ditetapkan.";
+    "Berdasarkan supervisi terpadu dan verifikasi dokumen kurikulum, proses pembelajaran kelas rangkap (multigrade) di SDN SEDAENG II TOSARI telah memenuhi standar Kurikulum Merdeka dan kaidah pedagogis yang ditetapkan.";
 
   const signature = await getReportSignatureBlock(school);
 
@@ -939,7 +939,7 @@ export async function fetchPrincipalExecutiveSummaryData(params?: {
     metadata: {
       academicYear: school.activeAcademicYear,
       semester: school.activeSemester,
-      curriculumSource: "Agregasi Database Multigrade Cerdas AI SDN Kandangan I Tosari",
+      curriculumSource: "Agregasi Database Multigrade Cerdas AI SDN SEDAENG II TOSARI",
       generatedAt: formatIndonesianDate(),
       generatedBy: "Bambang Sutrisno, S.Pd., M.Pd. (Kepala Sekolah)",
       version: 1,
