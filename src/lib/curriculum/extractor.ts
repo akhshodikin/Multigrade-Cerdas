@@ -31,26 +31,42 @@ export async function extractDocumentContent(
 ): Promise<ExtractionResult> {
   try {
     if (fileType === "pdf") {
-      // Dynamic import to prevent unnecessary server startup overhead
-      const pdfParseModule: any = await import("pdf-parse");
-      const pdfParse = typeof pdfParseModule === "function" ? pdfParseModule : pdfParseModule.default || pdfParseModule;
-      const pdfData = await pdfParse(buffer);
-      const text = pdfData.text ? pdfData.text.trim() : "";
+      try {
+        // Import lib directly to bypass pdf-parse's debug test file read bug (!module.parent)
+        // @ts-ignore
+        const pdfParseModule = await import("pdf-parse/lib/pdf-parse.js");
+        const pdfParse = (pdfParseModule.default || pdfParseModule) as (b: Buffer) => Promise<{ text?: string; numpages?: number }>;
 
-      // Evaluasi kualitas ekstraksi PDF
-      const nonPrintableCount = (text.match(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g) || []).length;
-      const isDubious =
-        text.length < 50 ||
-        (text.length > 0 && nonPrintableCount / text.length > 0.05);
+        // Timeout after 6 seconds to prevent serverless function hangs
+        const timeoutPromise = new Promise<{ text?: string; numpages?: number }>((_, reject) =>
+          setTimeout(() => reject(new Error("Timeout parsing PDF")), 6000)
+        );
+        const pdfData = await Promise.race([pdfParse(buffer), timeoutPromise]);
+        const text = pdfData?.text ? pdfData.text.trim() : "";
 
-      return {
-        text,
-        pageCount: pdfData.numpages || 1,
-        needsManualReview: isDubious,
-        reviewReason: isDubious
-          ? "Teks hasil ekstraksi PDF terlalu pendek atau mengandung karakter yang mencurigakan (perlu pemeriksaan manual oleh pengguna)."
-          : undefined,
-      };
+        // Evaluasi kualitas ekstraksi PDF
+        const nonPrintableCount = (text.match(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g) || []).length;
+        const isDubious =
+          text.length < 50 ||
+          (text.length > 0 && nonPrintableCount / text.length > 0.05);
+
+        return {
+          text,
+          pageCount: pdfData?.numpages || 1,
+          needsManualReview: isDubious,
+          reviewReason: isDubious
+            ? "Teks hasil ekstraksi PDF terlalu pendek atau mengandung karakter yang mencurigakan (perlu pemeriksaan manual oleh pengguna)."
+            : undefined,
+        };
+      } catch (pdfErr: unknown) {
+        const errMsg = pdfErr instanceof Error ? pdfErr.message : String(pdfErr);
+        console.warn(`[PDF Extractor] Gagal mengekstrak '${fileName}':`, errMsg);
+        return {
+          text: "",
+          needsManualReview: true,
+          reviewReason: `Tidak dapat mengekstraksi teks PDF otomatis (${errMsg}). Dokumen ditandai untuk pemeriksaan/input manual.`,
+        };
+      }
     }
 
     if (fileType === "docx") {

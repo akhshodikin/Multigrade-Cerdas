@@ -19,126 +19,137 @@ import { revalidatePath } from "next/cache";
 
 // 1. Impor & Pendaftaran Dokumen Sumber Kurikulum (PDF, DOCX, XLSX, Manual)
 export async function importCurriculumSourceAction(formData: FormData) {
-  const currentUser = await requireAuth(["admin", "headmaster", "teacher"]);
+  try {
+    const currentUser = await requireAuth(["admin", "headmaster", "teacher"]);
 
-  const title = formData.get("title") as string;
-  const documentNumber = formData.get("documentNumber") as string;
-  const issuingAuthority = (formData.get("issuingAuthority") as string) || "BSKAP Kemendikbudristek";
-  const publicationYear = Number(formData.get("publicationYear") || 2024);
-  const fileType = formData.get("fileType") as "pdf" | "docx" | "xlsx" | "manual";
-  const version = (formData.get("version") as string) || "v1.0";
-  const manualText = (formData.get("manualText") as string) || "";
-  const file = formData.get("file") as File | null;
+    const title = formData.get("title") as string;
+    const documentNumber = formData.get("documentNumber") as string;
+    const issuingAuthority = (formData.get("issuingAuthority") as string) || "BSKAP Kemendikbudristek";
+    const publicationYear = Number(formData.get("publicationYear") || 2024);
+    const fileType = formData.get("fileType") as "pdf" | "docx" | "xlsx" | "manual";
+    const version = (formData.get("version") as string) || "v1.0";
+    const manualText = (formData.get("manualText") as string) || "";
+    const file = formData.get("file") as File | null;
 
-  let extractedText = manualText;
-  let fileSize = 0;
-  let fileName = "";
-  let needsManualReview = false;
+    let extractedText = manualText;
+    let fileSize = 0;
+    let fileName = "";
+    let needsManualReview = false;
 
-  const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB limit
-  if (file && file.size > MAX_FILE_SIZE) {
-    return {
-      success: false,
-      error: "Ukuran berkas melebihi batas keamanan maksimal 15 MB.",
-    };
-  }
-
-  if (file && file.size > 0 && fileType !== "manual") {
-    fileName = file.name;
-    fileSize = file.size;
-
-    // Validasi ekstensi terhadap tipe berkas yang dideklarasikan
-    const ext = fileName.split(".").pop()?.toLowerCase();
-    const validExtensions: Record<string, string[]> = {
-      pdf: ["pdf"],
-      docx: ["docx"],
-      xlsx: ["xlsx", "xls"],
-    };
-
-    if (!ext || !validExtensions[fileType]?.includes(ext)) {
+    const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB limit
+    if (file && file.size > MAX_FILE_SIZE) {
       return {
         success: false,
-        error: `Format ekstensi .${ext} tidak sesuai dengan tipe berkas '${fileType}' yang dipilih.`,
+        error: "Ukuran berkas melebihi batas keamanan maksimal 15 MB.",
       };
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    if (file && file.size > 0 && fileType !== "manual") {
+      fileName = file.name;
+      fileSize = file.size;
 
-    const extraction = await extractDocumentContent(buffer, fileType, fileName);
-    extractedText = extraction.text;
-    needsManualReview = extraction.needsManualReview;
-  }
+      // Validasi ekstensi terhadap tipe berkas yang dideklarasikan
+      const ext = fileName.split(".").pop()?.toLowerCase();
+      const validExtensions: Record<string, string[]> = {
+        pdf: ["pdf"],
+        docx: ["docx"],
+        xlsx: ["xlsx", "xls"],
+      };
 
-  const validation = curriculumSourceSchema.safeParse({
-    title,
-    documentNumber,
-    issuingAuthority,
-    publicationYear,
-    fileType,
-    version,
-    needsManualReview,
-    extractedText,
-  });
+      if (!ext || !validExtensions[fileType]?.includes(ext)) {
+        return {
+          success: false,
+          error: `Format ekstensi .${ext} tidak sesuai dengan tipe berkas '${fileType}' yang dipilih.`,
+        };
+      }
 
-  if (!validation.success) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const extraction = await extractDocumentContent(buffer, fileType, fileName);
+      extractedText = extraction.text;
+      needsManualReview = extraction.needsManualReview;
+    }
+
+    const validation = curriculumSourceSchema.safeParse({
+      title,
+      documentNumber,
+      issuingAuthority,
+      publicationYear,
+      fileType,
+      version,
+      needsManualReview,
+      extractedText,
+    });
+
+    if (!validation.success) {
+      const fieldErrors = validation.error.flatten().fieldErrors;
+      const firstErrorMessage = Object.values(fieldErrors).flat()[0] || "Validasi dokumen sumber gagal";
+      return {
+        success: false,
+        error: firstErrorMessage,
+        errors: fieldErrors,
+      };
+    }
+
+    const data = validation.data;
+
+    // Aturan Wajib: Data yang belum diverifikasi harus berstatus draft
+    const [newSource] = await db
+      .insert(schema.curriculumSources)
+      .values({
+        title: data.title,
+        documentNumber: data.documentNumber,
+        issuingAuthority: data.issuingAuthority,
+        publicationYear: data.publicationYear,
+        fileType: data.fileType,
+        fileName: fileName || null,
+        fileSize: fileSize || null,
+        extractedText: data.extractedText || null,
+        needsManualReview: data.needsManualReview,
+        status: "draft", // Wajib draf
+        version: data.version,
+        uploadedById: currentUser.id,
+      })
+      .returning();
+
+    await recordCurriculumVersion({
+      entityType: "source_doc",
+      entityId: newSource.id,
+      versionNumber: 1,
+      changeType: "created",
+      changedById: currentUser.id,
+      changedByName: currentUser.name,
+      currentSnapshot: newSource as unknown as Record<string, unknown>,
+      changeReason: "Impor dokumen sumber kurikulum baru",
+    });
+
+    await recordAuditLog({
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userRole: currentUser.role,
+      action: "IMPORT_CURRICULUM_SOURCE",
+      targetEntity: "curriculum_source",
+      targetId: newSource.id,
+      details: { title: data.title, documentNumber: data.documentNumber, fileType: data.fileType, needsManualReview },
+    });
+
+    revalidatePath("/dashboard/kurikulum/sumber");
+    revalidatePath("/dashboard/kurikulum");
+
+    return {
+      success: true,
+      message: `Dokumen '${data.title}' berhasil diimpor sebagai Draf.${needsManualReview ? " Catatan: Dokumen ditandai untuk pemeriksaan manual oleh pengguna." : ""}`,
+      data: newSource,
+    };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.error("[importCurriculumSourceAction Error]:", errorMsg);
     return {
       success: false,
-      message: "Validasi dokumen sumber gagal",
-      errors: validation.error.flatten().fieldErrors,
+      error: errorMsg || "Gagal mengimpor dokumen sumber kurikulum.",
     };
   }
-
-  const data = validation.data;
-
-  // Aturan Wajib: Data yang belum diverifikasi harus berstatus draft
-  const [newSource] = await db
-    .insert(schema.curriculumSources)
-    .values({
-      title: data.title,
-      documentNumber: data.documentNumber,
-      issuingAuthority: data.issuingAuthority,
-      publicationYear: data.publicationYear,
-      fileType: data.fileType,
-      fileName: fileName || null,
-      fileSize: fileSize || null,
-      extractedText: data.extractedText || null,
-      needsManualReview: data.needsManualReview,
-      status: "draft", // Wajib draf
-      version: data.version,
-      uploadedById: currentUser.id,
-    })
-    .returning();
-
-  await recordCurriculumVersion({
-    entityType: "source_doc",
-    entityId: newSource.id,
-    versionNumber: 1,
-    changeType: "created",
-    changedById: currentUser.id,
-    changedByName: currentUser.name,
-    currentSnapshot: newSource as unknown as Record<string, unknown>,
-    changeReason: "Impor dokumen sumber kurikulum baru",
-  });
-
-  await recordAuditLog({
-    userId: currentUser.id,
-    userName: currentUser.name,
-    userRole: currentUser.role,
-    action: "IMPORT_CURRICULUM_SOURCE",
-    targetEntity: "curriculum_source",
-    targetId: newSource.id,
-    details: { title: data.title, documentNumber: data.documentNumber, fileType: data.fileType, needsManualReview },
-  });
-
-  revalidatePath("/dashboard/kurikulum/sumber");
-  revalidatePath("/dashboard/kurikulum");
-
-  return {
-    success: true,
-    message: `Dokumen '${data.title}' berhasil diimpor sebagai Draf.${needsManualReview ? " Catatan: Dokumen ditandai untuk pemeriksaan manual oleh pengguna." : ""}`,
-    data: newSource,
-  };
 }
 
 // 2. Tambah Capaian Pembelajaran (CP) dengan Verbatim & Deteksi Duplikat
