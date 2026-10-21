@@ -2,6 +2,7 @@ import { db } from "./index";
 import * as schema from "./schema";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { loadOfficialTpAndAtpData } from "../lib/curriculum/tp-atp-loader";
 
 export async function runSeed() {
   console.log("Memulai pengisian data awal (seed sintetis) SDN SEDAENG II Tosari...");
@@ -596,6 +597,16 @@ export async function runSeed() {
       },
     ]);
     console.log("✓ Jurnal mengajar kelas rangkap awal tersimpan.");
+  }
+
+  // 14. Muat 309 Tujuan Pembelajaran (TP) & Alur Tujuan Pembelajaran (ATP) Resmi BSKAP 032/H/KR/2024
+  try {
+    const importStats = await loadOfficialTpAndAtpData();
+    console.log(
+      `✓ 309 TP & ATP Resmi BSKAP 032/H/KR/2024 tersinkronisasi (TP: +${importStats.tpsAdded}, ATP Plans: +${importStats.atpPlansCreated}, ATP Items: +${importStats.atpItemsCreated}).`
+    );
+  } catch (tpErr) {
+    console.warn("Peringatan saat memuat TP & ATP resmi:", tpErr);
   }
 
   console.log("Pengisian data awal (seed sintetis & bank kurikulum) selesai dengan sukses!");

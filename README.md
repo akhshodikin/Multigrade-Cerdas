@@ -28,7 +28,8 @@ Setiap kelompok diajar oleh guru kelas yang berfokus mendampingi siswa dengan mo
 ## ✨ Fitur Utama Sistem
 
 1. **Bank Kurikulum Resmi BSKAP 032/H/KR/2024:**
-   - Validasi CP resmi nasional per fase dan elemen.
+   - 309 Tujuan Pembelajaran (TP) resmi dan 148 Alur Tujuan Pembelajaran (ATP) lengkap untuk Kelas 1 s/d 6 pada 16 mata pelajaran SD Kurikulum Merdeka.
+   - 156 Capaian Pembelajaran (CP) verbatim nasional per fase (Fase A, B, C) dan elemen.
    - Unggah dan ekstraksi dokumen kurikulum sekolah (PDF, DOCX, XLSX) dengan batas aman 15 MB.
 2. **Pemetaan Irisan Materi & Tema Bersama:**
    - Rekomendasi tema kontekstual lereng Bromo (pertanian sayur, kearifan lokal Tengger).
